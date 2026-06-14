@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chemie Lern-App – Reaktionsgleichungen</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --accent: #6c63ff;
+      --accent2: #00d4aa;
+      --warn: #ff6b6b;
+      --text: #e8eaf0;
+      --text-muted: #8b92a9;
+      --border: #2e3349;
+      --success: #4caf82;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      padding: 16px 0;
+      margin-right: 16px;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent2); }
+    .nav-tab {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 18px 16px;
+      font-size: 0.9rem;
+      border-bottom: 2px solid transparent;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .nav-tab:hover { color: var(--text); }
+    .nav-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* PAGES */
+    .page { display: none; padding: 32px 24px; max-width: 900px; margin: 0 auto; }
+    .page.active { display: block; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .hero h1 { font-size: 2rem; margin-bottom: 8px; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 24px; }
+    .hero-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .chip.accent { border-color: var(--accent); color: var(--accent); }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      color: var(--accent2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card h3 { font-size: 0.95rem; margin: 16px 0 8px; color: var(--text-muted); }
+
+    /* FORMULA BOX */
+    .formula-box {
+      background: var(--surface2);
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 16px 0;
+      text-align: center;
+      font-size: 1.15rem;
+      letter-spacing: 0.5px;
+    }
+    .formula-box .frac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      margin: 0 4px;
+    }
+    .formula-box .frac span:first-child {
+      border-bottom: 1.5px solid var(--text);
+      padding-bottom: 2px;
+      min-width: 40px;
+      text-align: center;
+    }
+    .formula-box .frac span:last-child {
+      padding-top: 2px;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    /* REACTION EQ */
+    .reaction {
+      font-size: 1.3rem;
+      text-align: center;
+      padding: 16px;
+      background: var(--surface2);
+      border-radius: 8px;
+      margin: 12px 0;
+      letter-spacing: 1px;
+    }
+    .reaction .coeff { color: var(--accent); font-weight: 700; }
+    .reaction .arrow { color: var(--accent2); margin: 0 8px; }
+    .reaction .sub { font-size: 0.75em; vertical-align: sub; }
+
+    /* STEPS */
+    .steps { list-style: none; }
+    .steps li {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .step-num {
+      background: var(--accent);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-content p { font-size: 0.95rem; line-height: 1.6; }
+    .step-content .inline-formula {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      margin: 8px 0;
+      font-family: monospace;
+      font-size: 0.95rem;
+    }
+
+    /* QUIZ */
+    .quiz-question {
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .quiz-context {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .quiz-options {
+      display: grid;
+      gap: 10px;
+    }
+    .quiz-option {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: left;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .quiz-option.correct { border-color: var(--success); background: rgba(76,175,130,.1); }
+    .quiz-option.wrong { border-color: var(--warn); background: rgba(255,107,107,.1); }
+    .quiz-option:disabled { cursor: default; }
+    .quiz-feedback {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      display: none;
+      line-height: 1.6;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.correct { background: rgba(76,175,130,.15); border: 1px solid var(--success); }
+    .quiz-feedback.wrong { background: rgba(255,107,107,.1); border: 1px solid var(--warn); }
+    .quiz-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .progress-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 4px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 4px;
+      transition: width .4s ease;
+    }
+    .score-badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.85rem;
+      color: var(--accent2);
+    }
+
+    /* CALCULATOR */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) { .calc-grid { grid-template-columns: 1fr; } }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-group label { font-size: 0.85rem; color: var(--text-muted); }
+    .input-group input, .input-group select {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .input-group input:focus, .input-group select:focus { border-color: var(--accent); }
+    .input-group select option { background: var(--surface2); }
+    .btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+    }
+    .btn:hover { opacity: .85; }
+    .btn:active { transform: scale(.97); }
+    .btn.secondary {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+    }
+    .btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .calc-result {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .calc-result h3 { color: var(--accent2); margin-bottom: 12px; }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-value { color: var(--accent2); font-weight: 600; font-family: monospace; }
+    .calc-steps {
+      margin-top: 16px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+
+    /* FLASHCARDS */
+    .flashcard-wrap {
+      perspective: 1000px;
+      margin-bottom: 24px;
+    }
+    .flashcard {
+      width: 100%;
+      min-height: 220px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .5s ease;
+      cursor: pointer;
+    }
+    .flashcard.flipped { transform: rotateY(180deg); }
+    .flashcard-face {
+      position: absolute;
+      inset: 0;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+      backface-visibility: hidden;
+    }
+    .flashcard-face.back {
+      transform: rotateY(180deg);
+      background: var(--surface2);
+      border-color: var(--accent);
+    }
+    .flashcard-face .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .flashcard-face .face-back-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .flashcard-face .question { font-size: 1.15rem; line-height: 1.6; }
+    .flashcard-face .answer {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .flashcard-hint {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+    }
+    .flashcard-nav {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .card-counter {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    /* MISC */
+    .badge {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 0.8rem;
+      margin-left: 6px;
+    }
+    .tip {
+      background: rgba(108, 99, 255, 0.1);
+      border: 1px solid rgba(108, 99, 255, 0.3);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-top: 12px;
+      color: var(--text);
+    }
+    .tip::before { content: "💡 "; }
+    .result-done {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .result-done .big-score {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+    .result-done p { color: var(--text-muted); margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Chemie<span>.learn</span></div>
+  <button class="nav-tab active" onclick="showPage('theorie')">Theorie</button>
+  <button class="nav-tab" onclick="showPage('karteikarten')">Karteikarten</button>
+  <button class="nav-tab" onclick="showPage('rechner')">Rechner</button>
+  <button class="nav-tab" onclick="showPage('quiz')">Quiz</button>
+</nav>
+
+<!-- ========== THEORIE ========== -->
+<div class="page active" id="page-theorie">
+  <div class="hero">
+    <h1>Chemisches Rechnen bei <span>Reaktionsgleichungen</span></h1>
+    <p>Lerneinheit 2.4 – Chemie WPF</p>
+    <div class="hero-chips">
+      <span class="chip accent">Stoffmengenverhältnis</span>
+      <span class="chip">Stöchiometrie</span>
+      <span class="chip">Mol-Berechnungen</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚖️ Das Stoffmengenverhältnis</h2>
+    <p style="color:var(--text-muted); line-height:1.7; margin-bottom:16px;">
+      Die Zahlen vor den Symbolen in einer Reaktionsgleichung heißen <strong style="color:var(--text)">Koeffizienten</strong>.
+      Sie beschreiben, in welchem Verhältnis die Teilchen reagieren – und damit auch das Verhältnis der Stoffmengen.
+    </p>
+
+    <h3>Allgemeine Formel</h3>
+    <div class="formula-box">
+      <div class="frac"><span>n(A)</span><span>n(B)</span></div>
+      &nbsp;=&nbsp;
+      <div class="frac"><span>Koeffizient vor A</span><span>Koeffizient vor B</span></div>
+    </div>
+
+    <h3>Beispiel-Reaktion</h3>
+    <div class="reaction">
+      <span class="coeff">2</span>A &nbsp;+&nbsp; <span class="coeff">3</span>B
+      <span class="arrow">→</span>
+      <span class="coeff">1</span>C &nbsp;+&nbsp; <span class="coeff">4</span>D
+    </div>
+
+    <h3>Abgeleitete Verhältnisse (bezogen auf A)</h3>
+    <div style="display:grid; gap:10px; margin-top:8px;">
+      <div class="inline-formula" style="display:block; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-family:monospace;">
+        n(B) = <strong style="color:var(--accent2)">3/2</strong> · n(A)&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;n(A) = <strong style="color:var(--accent)">2/3</strong> · n(B)
+      </div>
+      <div class="inline-formula" style="display:block; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-family:monospace;">
+        n(C) = <strong style="color:var(--accent2)">1/2</strong> · n(A)&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;n(A) = <strong style="color:var(--accent)">2</strong> · n(C)
+      </div>
+      <div class="inline-formula" style="display:block; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-family:monospace;">
+        n(D) = <strong style="color:var(--accent2)">2</strong> · n(A)&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;n(A) = <strong style="color:var(--accent)">1/2</strong> · n(D)
+      </div>
+    </div>
+
+    <div class="tip">
+      Je größer der Koeffizient vor einem Stoff, desto mehr Mol werden von ihm benötigt (oder gebildet).
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📐 Rechenweg Schritt für Schritt</h2>
+    <p style="color:var(--text-muted); margin-bottom:16px; font-size:0.9rem;">
+      Gegeben: 0,3 mol A in der Reaktion <strong style="color:var(--text)">2A + 3B → 1C + 4D</strong>. Gesucht: n(B), n(C), n(D)
+    </p>
+    <ul class="steps">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <p><strong>Reaktionsgleichung aufschreiben</strong> und Koeffizienten ablesen.</p>
+          <div class="reaction" style="font-size:1rem; padding:10px;">
+            <span class="coeff">2</span>A + <span class="coeff">3</span>B <span class="arrow">→</span> <span class="coeff">1</span>C + <span class="coeff">4</span>D
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <p><strong>Verhältnisformel aufstellen</strong> für den gesuchten Stoff:</p>
+          <div class="inline-formula">n(B) / n(A) = 3 / 2</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <p><strong>Umformen und einsetzen:</strong></p>
+          <div class="inline-formula">n(B) = 3/2 · 0,3 mol = <strong style="color:var(--accent2)">0,45 mol</strong></div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <p>Gleicher Weg für C und D:</p>
+          <div class="inline-formula">n(C) = 1/2 · 0,3 mol = <strong style="color:var(--accent2)">0,15 mol</strong></div>
+          <div class="inline-formula">n(D) = 4/2 · 0,3 mol = <strong style="color:var(--accent2)">0,6 mol</strong></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>🔬 Praxisbeispiel: Mg + S → MgS</h2>
+    <p style="color:var(--text-muted); margin-bottom:12px; line-height:1.6;">
+      Aus deinen handschriftlichen Notizen: Magnesium reagiert mit Schwefel zu Magnesiumsulfid.
+    </p>
+    <div class="reaction">
+      Mg &nbsp;+&nbsp; S <span class="arrow">→</span> MgS
+    </div>
+    <p style="margin: 12px 0; font-size:0.9rem; color:var(--text-muted);">
+      Koeffizienten sind jeweils <strong style="color:var(--accent)">1</strong> → 1:1-Verhältnis. Berechnung über Massen mit molarer Masse:
+    </p>
+    <ul class="steps">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <p>Molare Massen: M(Mg) = 24,3 g/mol &nbsp;|&nbsp; M(S) = 32,1 g/mol</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <p>Gegeben: 0,15 g Mg. Gesucht: Masse von S.</p>
+          <div class="inline-formula">n(Mg) = 0,15 g ÷ 24,3 g/mol ≈ 0,00617 mol</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <p>Da n(Mg) = n(S) (Verhältnis 1:1):</p>
+          <div class="inline-formula">m(S) = 0,00617 mol × 32,1 g/mol ≈ <strong style="color:var(--accent2)">0,198 g</strong></div>
+        </div>
+      </li>
+    </ul>
+    <div class="tip">
+      Dreisatz aus den Notizen: 0,15 g / 24,3 g = x / 32,1 g&nbsp;→&nbsp;x = (0,15 × 32,1) / 24,3 ≈ 0,198 g
+    </div>
+  </div>
+</div>
+
+<!-- ========== KARTEIKARTEN ========== -->
+<div class="page" id="page-karteikarten">
+  <div class="card" style="margin-bottom:8px;">
+    <h2>🃏 Karteikarten</h2>
+    <p style="color:var(--text-muted); font-size:0.9rem;">Klicke auf die Karte, um die Antwort zu sehen.</p>
+  </div>
+
+  <div class="card-counter" id="fc-counter">Karte 1 von 8</div>
+  <div class="flashcard-wrap">
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="flashcard-face front">
+        <div class="label">Frage</div>
+        <div class="question" id="fc-question"></div>
+      </div>
+      <div class="flashcard-face back">
+        <div class="face-back-label">Antwort</div>
+        <div class="answer" id="fc-answer"></div>
+      </div>
+    </div>
+  </div>
+  <div class="flashcard-hint">👆 Klicken zum Umdrehen</div>
+  <div class="flashcard-nav">
+    <button class="btn secondary" onclick="prevCard()">← Zurück</button>
+    <button class="btn secondary" onclick="nextCard()">Weiter →</button>
+  </div>
+</div>
+
+<!-- ========== RECHNER ========== -->
+<div class="page" id="page-rechner">
+  <div class="card">
+    <h2>🧮 Stoffmengen-Rechner</h2>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
+      Trage die Reaktionsgleichung und eine bekannte Stoffmenge ein – der Rechner berechnet alle anderen.
+    </p>
+
+    <h3>Reaktionsgleichung: aA + bB → cC + dD</h3>
+    <div class="calc-grid" style="margin-top:12px; margin-bottom:20px;">
+      <div class="input-group">
+        <label>Koeffizient a (vor A)</label>
+        <input type="number" id="coeff-a" value="2" min="1" />
+      </div>
+      <div class="input-group">
+        <label>Koeffizient b (vor B)</label>
+        <input type="number" id="coeff-b" value="3" min="1" />
+      </div>
+      <div class="input-group">
+        <label>Koeffizient c (vor C)</label>
+        <input type="number" id="coeff-c" value="1" min="1" />
+      </div>
+      <div class="input-group">
+        <label>Koeffizient d (vor D)</label>
+        <input type="number" id="coeff-d" value="4" min="1" />
+      </div>
+    </div>
+
+    <h3>Bekannte Größe</h3>
+    <div class="calc-grid" style="margin-top:12px; margin-bottom:20px;">
+      <div class="input-group">
+        <label>Stoff</label>
+        <select id="known-substance">
+          <option value="a">A</option>
+          <option value="b">B</option>
+          <option value="c">C</option>
+          <option value="d">D</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Stoffmenge n (in mol)</label>
+        <input type="number" id="known-amount" value="0.3" step="0.01" min="0" />
+      </div>
+    </div>
+
+    <button class="btn" onclick="calculate()">Berechnen</button>
+
+    <div class="calc-result" id="calc-result" style="display:none;">
+      <h3>Ergebnisse</h3>
+      <div id="result-rows"></div>
+      <div class="calc-steps" id="calc-steps"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚗️ Masse-Rechner (Mg + S → MgS)</h2>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
+      Basierend auf deinem Beispiel aus den Notizen.
+    </p>
+    <div class="calc-grid">
+      <div class="input-group">
+        <label>Masse von Mg (g)</label>
+        <input type="number" id="mg-mass" value="0.15" step="0.01" min="0" />
+      </div>
+      <div class="input-group" style="align-self:end;">
+        <button class="btn" onclick="calcMgS()" style="width:100%;">Berechnen</button>
+      </div>
+    </div>
+    <div class="calc-result" id="mgs-result" style="display:none; margin-top:16px;">
+      <h3>Ergebnis</h3>
+      <div id="mgs-rows"></div>
+      <div class="calc-steps" id="mgs-steps"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== QUIZ ========== -->
+<div class="page" id="page-quiz">
+  <div class="card" id="quiz-container">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h2 style="margin-bottom:0;">🧪 Quiz</h2>
+      <span class="score-badge" id="quiz-score">0 / 0 richtig</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
+    <div id="quiz-content"></div>
+  </div>
+</div>
+
+<script>
+// ============ NAVIGATION ============
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'quiz' && !quizStarted) initQuiz();
+  if (id === 'karteikarten') renderCard();
+}
+
+// ============ FLASHCARDS ============
+const flashcards = [
+  {
+    q: "Was gibt das Stoffmengenverhältnis an?",
+    a: "Das Verhältnis der Koeffizienten in einer Reaktionsgleichung entspricht dem Verhältnis der Stoffmengen der beteiligten Stoffe."
+  },
+  {
+    q: "Wie lautet die allgemeine Formel für das Stoffmengenverhältnis von A zu B?",
+    a: "n(A) / n(B) = Koeffizient vor A / Koeffizient vor B"
+  },
+  {
+    q: "In der Reaktion 2A + 3B → C + 4D: Wie viel mol B werden benötigt, wenn 0,3 mol A eingesetzt werden?",
+    a: "n(B) = 3/2 · 0,3 mol = 0,45 mol\n(Verhältnis A:B = 2:3)"
+  },
+  {
+    q: "Was ist die molare Masse von Magnesium (Mg)?",
+    a: "M(Mg) ≈ 24,3 g/mol\n(abzulesen aus dem Periodensystem)"
+  },
+  {
+    q: "Mg + S → MgS: In welchem Verhältnis reagieren Mg und S?",
+    a: "1 : 1 (beide Koeffizienten sind 1)\n→ n(Mg) = n(S)"
+  },
+  {
+    q: "In der Reaktion 2A + 3B → 1C + 4D: Wie viel mol C entstehen aus 0,3 mol A?",
+    a: "n(C) = 1/2 · 0,3 mol = 0,15 mol\n(Verhältnis A:C = 2:1)"
+  },
+  {
+    q: "Wie rechnet man von der Masse eines Stoffes auf die Stoffmenge um?",
+    a: "n = m / M\n• n = Stoffmenge in mol\n• m = Masse in g\n• M = Molare Masse in g/mol"
+  },
+  {
+    q: "Was sind Koeffizienten in einer Reaktionsgleichung?",
+    a: "Die Zahlen vor den Elementen/Verbindungen (z.B. die 2 in 2H₂O). Sie geben das Teilchen- und Stoffmengenverhältnis an."
+  }
+];
+
+let fcIndex = 0;
+function renderCard() {
+  const card = flashcards[fcIndex];
+  document.getElementById('fc-question').textContent = card.q;
+  document.getElementById('fc-answer').textContent = card.a;
+  document.getElementById('fc-counter').textContent = `Karte ${fcIndex + 1} von ${flashcards.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+function flipCard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+function nextCard() {
+  fcIndex = (fcIndex + 1) % flashcards.length;
+  renderCard();
+}
+function prevCard() {
+  fcIndex = (fcIndex - 1 + flashcards.length) % flashcards.length;
+  renderCard();
+}
+renderCard();
+
+// ============ CALCULATOR ============
+function calculate() {
+  const a = parseFloat(document.getElementById('coeff-a').value);
+  const b = parseFloat(document.getElementById('coeff-b').value);
+  const c = parseFloat(document.getElementById('coeff-c').value);
+  const d = parseFloat(document.getElementById('coeff-d').value);
+  const substance = document.getElementById('known-substance').value;
+  const amount = parseFloat(document.getElementById('known-amount').value);
+
+  if (isNaN(a)||isNaN(b)||isNaN(c)||isNaN(d)||isNaN(amount)) return;
+
+  const coeffs = { a, b, c, d };
+  const names = { a: 'A', b: 'B', c: 'C', d: 'D' };
+  const knownCoeff = coeffs[substance];
+
+  const results = {};
+  for (const key of ['a','b','c','d']) {
+    results[key] = (coeffs[key] / knownCoeff) * amount;
+  }
+
+  const rowsEl = document.getElementById('result-rows');
+  rowsEl.innerHTML = '';
+  for (const key of ['a','b','c','d']) {
+    const row = document.createElement('div');
+    row.className = 'result-row';
+    row.innerHTML = `<span>n(${names[key]})</span><span class="result-value">${results[key].toFixed(4)} mol</span>`;
+    rowsEl.appendChild(row);
+  }
+
+  let steps = `Gegeben: n(${names[substance]}) = ${amount} mol\n`;
+  steps += `Koeffizienten: a=${a}, b=${b}, c=${c}, d=${d}\n\n`;
+  for (const key of ['a','b','c','d']) {
+    if (key !== substance) {
+      steps += `n(${names[key]}) = ${coeffs[key]}/${knownCoeff} × ${amount} = ${results[key].toFixed(4)} mol\n`;
+    }
+  }
+  document.getElementById('calc-steps').textContent = steps;
+  document.getElementById('calc-result').style.display = 'block';
+}
+
+function calcMgS() {
+  const mMg = parseFloat(document.getElementById('mg-mass').value);
+  if (isNaN(mMg) || mMg <= 0) return;
+  const MMg = 24.305, MS = 32.06, MMgS = 56.365;
+  const nMg = mMg / MMg;
+  const nS = nMg;
+  const mS = nS * MS;
+  const mMgS = nMg * MMgS;
+
+  const rowsEl = document.getElementById('mgs-rows');
+  rowsEl.innerHTML = `
+    <div class="result-row"><span>n(Mg)</span><span class="result-value">${nMg.toFixed(5)} mol</span></div>
+    <div class="result-row"><span>n(S) = n(Mg)</span><span class="result-value">${nS.toFixed(5)} mol</span></div>
+    <div class="result-row"><span>m(S)</span><span class="result-value">${mS.toFixed(4)} g</span></div>
+    <div class="result-row"><span>m(MgS) gebildet</span><span class="result-value">${mMgS.toFixed(4)} g</span></div>
+  `;
+
+  document.getElementById('mgs-steps').textContent =
+    `n(Mg) = ${mMg} g ÷ 24,305 g/mol = ${nMg.toFixed(5)} mol
+Mg : S = 1 : 1 → n(S) = ${nS.toFixed(5)} mol
+m(S) = ${nS.toFixed(5)} mol × 32,06 g/mol = ${mS.toFixed(4)} g
+m(MgS) = ${nMg.toFixed(5)} mol × 56,365 g/mol = ${mMgS.toFixed(4)} g
+
+Dreisatz (wie in den Notizen):
+${mMg} g / 24,305 g = x / 32,06 g
+x = (${mMg} × 32,06) / 24,305 = ${mS.toFixed(4)} g`;
+
+  document.getElementById('mgs-result').style.display = 'block';
+}
+
+// ============ QUIZ ============
+const questions = [
+  {
+    q: "In der Reaktion 2A + 3B → C + 4D werden 0,3 mol A eingesetzt. Wie viel mol B werden benötigt?",
+    context: "Reaktionsgleichung: 2A + 3B → 1C + 4D\nn(A) = 0,3 mol",
+    options: ["0,2 mol", "0,45 mol", "0,6 mol", "0,9 mol"],
+    correct: 1,
+    explanation: "n(B)/n(A) = 3/2 → n(B) = 3/2 · 0,3 = 0,45 mol. Das Koeffizientenverhältnis A:B = 2:3 wird auf die Stoffmenge übertragen."
+  },
+  {
+    q: "In der gleichen Reaktion: Wie viel mol C entstehen?",
+    context: "Reaktionsgleichung: 2A + 3B → 1C + 4D\nn(A) = 0,3 mol",
+    options: ["0,3 mol", "0,6 mol", "0,15 mol", "1,2 mol"],
+    correct: 2,
+    explanation: "n(C)/n(A) = 1/2 → n(C) = 1/2 · 0,3 = 0,15 mol. A:C = 2:1, daher entsteht halb so viel C wie A eingesetzt wird."
+  },
+  {
+    q: "Wie lautet die Formel für das Stoffmengenverhältnis von Stoff A zu Stoff B?",
+    context: "Allgemeine Reaktion: aA + bB → ...",
+    options: [
+      "n(A)/n(B) = n(B)/n(A)",
+      "n(A)/n(B) = Koeffizient_A / Koeffizient_B",
+      "n(A) · n(B) = Koeffizient_A · Koeffizient_B",
+      "n(A) = n(B) immer"
+    ],
+    correct: 1,
+    explanation: "Die Stoffmengen verhalten sich wie die Koeffizienten: n(A)/n(B) = a/b. Dies ist das Grundprinzip der Stöchiometrie."
+  },
+  {
+    q: "Welche Masse Schwefel (S) reagiert mit 0,15 g Magnesium (Mg)?\nM(Mg) = 24,3 g/mol | M(S) = 32,1 g/mol",
+    context: "Mg + S → MgS\nKoeffizientenverhältnis: 1:1",
+    options: ["0,15 g", "0,198 g", "0,32 g", "0,242 g"],
+    correct: 1,
+    explanation: "n(Mg) = 0,15/24,3 ≈ 0,00617 mol. Da n(Mg) = n(S): m(S) = 0,00617 · 32,1 ≈ 0,198 g. Dreisatz: 0,15/24,3 = x/32,1 → x ≈ 0,198 g."
+  },
+  {
+    q: "In der Reaktion 2A + 3B → 1C + 4D: Wie viel mol D entstehen aus 0,3 mol A?",
+    context: "n(A) = 0,3 mol",
+    options: ["0,15 mol", "0,3 mol", "0,45 mol", "0,6 mol"],
+    correct: 3,
+    explanation: "n(D)/n(A) = 4/2 = 2 → n(D) = 2 · 0,3 = 0,6 mol. Der Koeffizient 4 vor D geteilt durch den Koeffizient 2 vor A ergibt den Faktor 2."
+  },
+  {
+    q: "Was bedeuten die Koeffizienten in einer Reaktionsgleichung?",
+    options: [
+      "Die Anzahl der Protonen im Atom",
+      "Das Verhältnis der Massen der Stoffe",
+      "Das Verhältnis der Teilchen- und Stoffmengen der Reaktionspartner",
+      "Die Reaktionstemperatur in Kelvin"
+    ],
+    correct: 2,
+    explanation: "Koeffizienten geben das Verhältnis an, in dem Teilchen miteinander reagieren. Da die Stoffmenge n proportional zur Teilchenzahl ist, entspricht dies auch dem Stoffmengenverhältnis."
+  },
+  {
+    q: "Wenn n(A) = 0,6 mol und n(B) = 0,9 mol, welches Koeffizientenverhältnis A:B passt dazu?",
+    context: "Welche Reaktionsgleichung ist korrekt?",
+    options: ["1A + 1B →", "3A + 2B →", "2A + 3B →", "4A + 3B →"],
+    correct: 2,
+    explanation: "n(A)/n(B) = 0,6/0,9 = 2/3 → Koeffizienten A:B = 2:3. Daher: 2A + 3B → ..."
+  }
+];
+
+let quizIndex = 0, quizScore = 0, quizStarted = false, answered = false;
+
+function initQuiz() {
+  quizStarted = true;
+  quizIndex = 0;
+  quizScore = 0;
+  answered = false;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (quizIndex >= questions.length) {
+    showResult();
+    return;
+  }
+  answered = false;
+  const q = questions[quizIndex];
+  const pct = (quizIndex / questions.length) * 100;
+  document.getElementById('quiz-progress').style.width = pct + '%';
+  document.getElementById('quiz-score').textContent = `${quizScore} / ${quizIndex} richtig`;
+
+  let html = `<div class="quiz-question"><strong>Frage ${quizIndex + 1} / ${questions.length}:</strong> ${q.q.replace(/\n/g,'<br>')}</div>`;
+  if (q.context) html += `<div class="quiz-context">${q.context.replace(/\n/g,'<br>')}</div>`;
+  html += `<div class="quiz-options">`;
+  q.options.forEach((opt, i) => {
+    html += `<button class="quiz-option" id="opt-${i}" onclick="answer(${i})">${opt}</button>`;
+  });
+  html += `</div>`;
+  html += `<div class="quiz-feedback" id="feedback"></div>`;
+  html += `<div class="quiz-nav"><span></span><button class="btn" id="next-btn" onclick="nextQ()" style="display:none;">Nächste Frage →</button></div>`;
+  document.getElementById('quiz-content').innerHTML = html;
+}
+
+function answer(selected) {
+  if (answered) return;
+  answered = true;
+  const q = questions[quizIndex];
+  const isCorrect = selected === q.correct;
+  if (isCorrect) quizScore++;
+
+  document.querySelectorAll('.quiz-option').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === selected && !isCorrect) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '✅ Richtig! ' : '❌ Leider falsch. ') + q.explanation;
+
+  document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('quiz-score').textContent = `${quizScore} / ${quizIndex + 1} richtig`;
+}
+
+function nextQ() {
+  quizIndex++;
+  renderQuestion();
+}
+
+function showResult() {
+  document.getElementById('quiz-progress').style.width = '100%';
+  const pct = Math.round((quizScore / questions.length) * 100);
+  let msg = pct >= 80 ? '🎉 Ausgezeichnet! Du beherrschst das Stoffmengenverhältnis!' :
+            pct >= 60 ? '👍 Gut gemacht! Schau dir nochmal die Theorie an.' :
+            '📚 Übe nochmal mit den Karteikarten und dem Rechner.';
+  document.getElementById('quiz-content').innerHTML = `
+    <div class="result-done">
+      <div class="big-score">${quizScore} / ${questions.length}</div>
+      <div style="font-size:1.5rem; margin-bottom:8px;">${pct}%</div>
+      <p>${msg}</p>
+      <button class="btn" onclick="initQuiz()">Quiz wiederholen</button>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
