@@ -385,6 +385,75 @@
       background: var(--brand);
     }
 
+    /* ---------- Podcast ---------- */
+    .pod-feature {
+      border-radius: var(--radius); overflow: hidden;
+      background: var(--text); color: #fff;
+      display: flex; flex-direction: column;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .pod-feature .pf-img { height: 160px; background-size: cover; background-position: center; position: relative; }
+    .pod-feature .pf-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--brand); color: var(--text);
+      font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 5px 11px; border-radius: 999px;
+    }
+    .pod-feature .pf-body { padding: 16px 16px 18px; }
+    .pod-feature .pf-show { font-size: 0.75rem; color: var(--brand); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    .pod-feature h3 { font-size: 1.2rem; font-weight: 800; line-height: 1.2; margin: 6px 0 10px; }
+    .pod-feature .pf-row { display: flex; align-items: center; gap: 12px; }
+    .pf-play {
+      width: 48px; height: 48px; border-radius: 50%; flex: none;
+      background: var(--brand); border: none; cursor: pointer;
+      display: grid; place-items: center;
+    }
+    .pf-play svg { width: 22px; height: 22px; fill: var(--text); }
+    .pod-feature .pf-meta { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+
+    .show-scroll { display: flex; gap: 14px; overflow-x: auto; padding: 4px 18px 8px; scrollbar-width: none; }
+    .show-scroll::-webkit-scrollbar { display: none; }
+    .show { flex: none; width: 120px; cursor: pointer; }
+    .show .cover { width: 120px; height: 120px; border-radius: 16px; background-size: cover; background-position: center;
+      box-shadow: var(--shadow); border: 2px solid var(--text); }
+    .show p.s-name { font-size: 0.82rem; font-weight: 700; margin-top: 8px; line-height: 1.2; }
+    .show p.s-host { font-size: 0.72rem; color: var(--text-muted); }
+
+    .pod-ep {
+      display: flex; align-items: center; gap: 13px;
+      padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+    }
+    .pod-ep .ep-cover { width: 56px; height: 56px; min-width: 56px; border-radius: 12px; background-size: cover; background-position: center; }
+    .pod-ep .ep-info { flex: 1; min-width: 0; }
+    .pod-ep .ep-show { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+    .pod-ep .ep-info h4 { font-size: 0.95rem; font-weight: 700; line-height: 1.25; margin: 2px 0; }
+    .pod-ep .ep-meta { font-size: 0.74rem; color: var(--text-muted); }
+    .pod-ep .ep-play {
+      width: 38px; height: 38px; min-width: 38px; border-radius: 50%;
+      border: 1.5px solid var(--text); background: #fff; cursor: pointer;
+      display: grid; place-items: center;
+    }
+    .pod-ep .ep-play svg { width: 16px; height: 16px; fill: var(--text); }
+    .pod-ep.playing .ep-play { background: var(--brand); }
+
+    /* Mini-Player */
+    .miniplayer {
+      position: sticky; bottom: var(--nav-h); z-index: 55;
+      margin: 0; display: none;
+      align-items: center; gap: 12px;
+      background: var(--text); color: #fff;
+      padding: 10px 14px calc(10px + var(--safe-bottom));
+      border-top: 2px solid var(--brand);
+    }
+    .miniplayer.show { display: flex; }
+    .miniplayer .mp-cover { width: 40px; height: 40px; border-radius: 8px; background-size: cover; background-position: center; flex: none; }
+    .miniplayer .mp-info { flex: 1; min-width: 0; }
+    .miniplayer .mp-info h5 { font-size: 0.82rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .miniplayer .mp-info .mp-show { font-size: 0.7rem; color: var(--brand); font-weight: 700; }
+    .miniplayer .mp-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--brand); cursor: pointer; display: grid; place-items: center; flex: none; }
+    .miniplayer .mp-btn svg { width: 20px; height: 20px; fill: var(--text); }
+    .miniplayer .mp-progress { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--brand); width: 0%; transition: width .3s linear; }
+
     /* Toast */
     .toast {
       position: fixed; left: 50%; bottom: calc(var(--nav-h) + 20px);
@@ -482,17 +551,17 @@
         <div class="section" style="padding-top:6px;"><div id="eventList"></div></div>
       </section>
 
-      <!-- ===== KARTE ===== -->
-      <section class="page" id="page-map">
-        <div class="section"><div class="section-head"><h2>In deiner Nähe</h2></div></div>
-        <div id="mapWrap" style="margin:0 18px; border-radius:var(--radius); overflow:hidden; height:240px; position:relative; box-shadow:var(--shadow); background:linear-gradient(135deg,#ffe3ec,#ffd9c4); display:grid; place-items:center;">
-          <div style="text-align:center; color:#a23; font-weight:700;">
-            <div style="font-size:2.2rem;">🗺️</div>
-            <div style="font-size:0.85rem; margin-top:6px;">Kiez-Karte · Friedrichshain · Kreuzberg</div>
-          </div>
-        </div>
-        <div class="section"><div class="section-head"><h2>Spots um die Ecke</h2></div></div>
-        <div class="list" id="mapList"></div>
+      <!-- ===== PODCAST ===== -->
+      <section class="page" id="page-podcast">
+        <div class="section"><div class="section-head"><h2>Podcasts</h2></div></div>
+        <!-- Featured Episode -->
+        <div id="podFeatured" style="margin:0 18px;"></div>
+        <!-- Shows -->
+        <div class="section"><div class="section-head"><h2>Unsere Shows</h2></div></div>
+        <div class="show-scroll" id="showScroll"></div>
+        <!-- Episoden -->
+        <div class="section"><div class="section-head"><h2>Neue Folgen</h2></div></div>
+        <div id="podList" style="padding:0 18px;"></div>
       </section>
 
       <!-- ===== FAVORITEN ===== -->
@@ -515,6 +584,19 @@
       </div>
     </div>
 
+    <!-- ===== Mini-Player ===== -->
+    <div class="miniplayer" id="miniplayer">
+      <div class="mp-progress" id="mpProgress"></div>
+      <div class="mp-cover" id="mpCover"></div>
+      <div class="mp-info">
+        <div class="mp-show" id="mpShow"></div>
+        <h5 id="mpTitle"></h5>
+      </div>
+      <button class="mp-btn" id="mpToggle" onclick="togglePlay()" aria-label="Play/Pause">
+        <svg id="mpIcon" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+      </button>
+    </div>
+
     <!-- ===== Bottom-Nav ===== -->
     <nav class="tabbar">
       <button class="tab active" data-tab="home" onclick="go('home')">
@@ -529,9 +611,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Events
       </button>
-      <button class="tab" data-tab="map" onclick="go('map')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-7.2-7-12a7 7 0 0114 0c0 4.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        Karte
+      <button class="tab" data-tab="podcast" onclick="go('podcast')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0118 0v2"/><rect x="2.5" y="13" width="4" height="7" rx="2"/><rect x="17.5" y="13" width="4" height="7" rx="2"/></svg>
+        Podcast
       </button>
       <button class="tab" data-tab="fav" onclick="go('fav')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5 5 0 00-7-.2L12 7l-1.8-1.6a5 5 0 10-6.8 7.2L12 21l8.6-8.4a5 5 0 00.2-7z"/></svg>
@@ -694,6 +776,38 @@
     {id:'food', name:'Food'}, {id:'ausgehen', name:'Party'}, {id:'erlebnis', name:'Stadt'}
   ];
 
+  /* Podcasts (Shows + Episoden) */
+  const SHOWS = [
+    { id:'s1', name:'Hotel Matze', host:'Matze Hielscher', img:IMG.coffee },
+    { id:'s2', name:'Reisevergnügen', host:'Mit Vergnügen', img:IMG.rooftop },
+    { id:'s3', name:'Berlin am Ohr', host:'Lena & Jonas', img:IMG.city },
+    { id:'s4', name:'Feierabend', host:'Die Redaktion', img:IMG.bar },
+    { id:'s5', name:'Tellergespräche', host:'Theo kocht', img:IMG.food }
+  ];
+
+  const PODCASTS = [
+    { id:'p1', show:'Hotel Matze', img:IMG.coffee, featured:true,
+      title:'Wie trifft man eigentlich gute Entscheidungen?',
+      dur:'1 Std 14 Min', date:'Neue Folge',
+      desc:'Matze Hielscher spricht mit seinem Gast über die großen und kleinen Fragen des Lebens – ehrlich, neugierig und ohne Eile.' },
+    { id:'p2', show:'Reisevergnügen', img:IMG.rooftop,
+      title:'24 Stunden in Lissabon – die perfekte Mini-Reise',
+      dur:'42 Min', date:'Vor 2 Tagen',
+      desc:'Von Pastéis de Nata bis Sonnenuntergang am Tejo: ein Tag in Portugals Hauptstadt.' },
+    { id:'p3', show:'Berlin am Ohr', img:IMG.city,
+      title:'Warum liebt die ganze Welt eigentlich Berlin?',
+      dur:'56 Min', date:'Vor 4 Tagen',
+      desc:'Ein Streifzug durch die Stadt, ihre Mythen und die schönsten Ecken abseits der Touri-Pfade.' },
+    { id:'p4', show:'Feierabend', img:IMG.bar,
+      title:'Die besten Spätis & wo der Feierabend beginnt',
+      dur:'38 Min', date:'Vor 6 Tagen',
+      desc:'Kühles Bier, warme Sommerluft – die Redaktion über Berlins liebste Abendrituale.' },
+    { id:'p5', show:'Tellergespräche', img:IMG.food,
+      title:'Was die Berliner Küche so besonders macht',
+      dur:'49 Min', date:'Vor 1 Woche',
+      desc:'Von der Currywurst bis zum Sternemenü: ein Gespräch über Essen, das verbindet.' }
+  ];
+
   /* ---------- State ---------- */
   let favs = JSON.parse(localStorage.getItem('mv_favs') || '[]');
   let activeCat = 'all';
@@ -796,8 +910,75 @@
   }
   function filterEvents(id){ window._ef = id; renderEvents(); }
 
-  function renderMap(){
-    document.getElementById('mapList').innerHTML = ARTICLES.filter(a=>['essen','ausgehen'].includes(a.cat)).slice(0,5).map(a => articleCard(a)).join('');
+  /* ---------- Podcasts ---------- */
+  const playSVG = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  const podById = id => PODCASTS.find(p => p.id === id);
+
+  function renderPodcast(){
+    const feat = PODCASTS.find(p => p.featured) || PODCASTS[0];
+    document.getElementById('podFeatured').innerHTML = `
+      <div class="pod-feature" onclick="playEpisode('${feat.id}')">
+        <div class="pf-img" style="background-image:url('${feat.img}')"><span class="pf-badge">▶ Jetzt hören</span></div>
+        <div class="pf-body">
+          <div class="pf-show">${esc(feat.show)}</div>
+          <h3>${esc(feat.title)}</h3>
+          <div class="pf-row">
+            <button class="pf-play" onclick="playEpisode('${feat.id}', event)" aria-label="Abspielen">${playSVG}</button>
+            <span class="pf-meta">${esc(feat.dur)} · ${esc(feat.date)}</span>
+          </div>
+        </div>
+      </div>`;
+
+    document.getElementById('showScroll').innerHTML = SHOWS.map(s => `
+      <div class="show" onclick="toast('🎙️ ${esc(s.name)} abonniert')">
+        <div class="cover" style="background-image:url('${s.img}')"></div>
+        <p class="s-name">${esc(s.name)}</p>
+        <p class="s-host">${esc(s.host)}</p>
+      </div>`).join('');
+
+    document.getElementById('podList').innerHTML = PODCASTS.map(p => `
+      <div class="pod-ep ${current===p.id?'playing':''}" onclick="playEpisode('${p.id}')">
+        <div class="ep-cover" style="background-image:url('${p.img}')"></div>
+        <div class="ep-info">
+          <div class="ep-show">${esc(p.show)}</div>
+          <h4>${esc(p.title)}</h4>
+          <div class="ep-meta">${esc(p.dur)} · ${esc(p.date)}</div>
+        </div>
+        <button class="ep-play" onclick="playEpisode('${p.id}', event)" aria-label="Abspielen">${playSVG}</button>
+      </div>`).join('');
+  }
+
+  /* Simulierter Mini-Player */
+  let current = null, playing = false, progress = 0, _timer = null;
+  function playEpisode(id, e){
+    if(e) e.stopPropagation();
+    const p = podById(id); if(!p) return;
+    if(current === id){ togglePlay(); return; }
+    current = id; playing = true; progress = 0;
+    document.getElementById('mpCover').style.backgroundImage = `url('${p.img}')`;
+    document.getElementById('mpShow').textContent = p.show;
+    document.getElementById('mpTitle').textContent = p.title;
+    document.getElementById('miniplayer').classList.add('show');
+    setPlayIcon(); startTimer(); renderPodcast();
+    toast('▶ ' + p.title);
+  }
+  function togglePlay(){
+    if(!current) return;
+    playing = !playing; setPlayIcon();
+    if(playing) startTimer(); else clearInterval(_timer);
+  }
+  function setPlayIcon(){
+    document.getElementById('mpIcon').innerHTML = playing
+      ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>'
+      : '<path d="M8 5v14l11-7z"/>';
+  }
+  function startTimer(){
+    clearInterval(_timer);
+    _timer = setInterval(() => {
+      progress = Math.min(100, progress + 1.2);
+      document.getElementById('mpProgress').style.width = progress + '%';
+      if(progress >= 100){ clearInterval(_timer); playing = false; setPlayIcon(); }
+    }, 400);
   }
 
   function renderFav(){
@@ -812,7 +993,7 @@
 
   function renderAll(){
     renderStories(); renderHero(); renderChips(); renderPopular(); renderFeed();
-    renderGuides(); renderEvents(); renderMap(); renderFav();
+    renderGuides(); renderEvents(); renderPodcast(); renderFav();
   }
 
   /* ---------- Navigation ---------- */
