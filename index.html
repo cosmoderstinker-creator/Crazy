@@ -2,968 +2,859 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chemie Lern-App – Reaktionsgleichungen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Mit Vergnügen" />
+  <meta name="description" content="Mit Vergnügen Berlin – dein Freund in der Großstadt. Die besten Tipps zum Essen, Trinken, Ausgehen und Erleben." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <title>Mit Vergnügen Berlin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #22263a;
-      --accent: #6c63ff;
-      --accent2: #00d4aa;
-      --warn: #ff6b6b;
-      --text: #e8eaf0;
-      --text-muted: #8b92a9;
-      --border: #2e3349;
-      --success: #4caf82;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
+      /* Mit-Vergnügen-inspirierte Palette: clean weiß, kräftiges Schwarz, Signature-Pink */
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-2: #f7f6f4;
+      --text: #14110f;
+      --text-muted: #6f6a64;
+      --border: #ececea;
+      --accent: #ff1f5e;        /* Signature-Pink */
+      --accent-dark: #e00049;
+      --accent-soft: #fff0f4;
+      --yellow: #ffd23f;
+      --shadow: 0 8px 30px rgba(20, 17, 15, 0.08);
+      --radius: 18px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --nav-h: 64px;
     }
 
-    /* NAV */
-    nav {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--surface-2);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior-y: none;
+    }
+
+    /* ---------- App-Rahmen (Phone-Feel auf Desktop) ---------- */
+    .app {
+      position: relative;
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
+      box-shadow: 0 0 60px rgba(0,0,0,0.08);
       display: flex;
-      align-items: center;
-      gap: 8px;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ---------- Header ---------- */
+    header {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: calc(var(--safe-top) + 12px) 18px 12px;
     }
-    .nav-logo {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--accent);
-      padding: 16px 0;
-      margin-right: 16px;
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* Logo-Schriftzug "mit Vergnügen" (CSS-Rekonstruktion) */
+    .logo {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 5px;
+      font-family: 'Fraunces', Georgia, serif;
+      line-height: 1;
+      cursor: pointer;
+      user-select: none;
+    }
+    .logo .mit {
+      font-weight: 600;
+      font-size: 1.02rem;
+      font-style: italic;
+      color: var(--text);
+    }
+    .logo .verg {
+      font-weight: 900;
+      font-size: 1.5rem;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    .logo .dot { color: var(--accent); }
+
+    .icon-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: grid; place-items: center;
+      cursor: pointer;
+      color: var(--text);
+      transition: background .15s, transform .1s;
+    }
+    .icon-btn:active { transform: scale(0.92); }
+    .icon-btn svg { width: 20px; height: 20px; }
+
+    /* Stadt-Wähler */
+    .city-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--text); color: #fff;
+      font-size: 0.78rem; font-weight: 700;
+      padding: 6px 12px; border-radius: 999px;
+      border: none; cursor: pointer;
+    }
+    .city-pill svg { width: 13px; height: 13px; }
+
+    /* Suche */
+    .search {
+      margin-top: 12px;
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 11px 14px;
+    }
+    .search svg { width: 18px; height: 18px; color: var(--text-muted); flex: none; }
+    .search input {
+      border: none; background: none; outline: none;
+      font-size: 0.95rem; width: 100%; color: var(--text);
+      font-family: inherit;
+    }
+
+    /* ---------- Scroll-Bereich ---------- */
+    main {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(var(--nav-h) + var(--safe-bottom) + 16px);
+    }
+    .page { display: none; animation: fade .25s ease; }
+    .page.active { display: block; }
+    @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .section { padding: 20px 18px 4px; }
+    .section-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-head h2 {
+      font-family: 'Fraunces', serif;
+      font-weight: 900; font-size: 1.35rem; letter-spacing: -0.3px;
+    }
+    .section-head a { color: var(--accent); font-size: 0.82rem; font-weight: 700; text-decoration: none; }
+
+    /* ---------- Kategorien-Chips ---------- */
+    .chips {
+      display: flex; gap: 8px; overflow-x: auto;
+      padding: 14px 18px 4px;
+      scrollbar-width: none;
+    }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip {
+      flex: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.82rem; font-weight: 600;
+      padding: 8px 15px; border-radius: 999px;
+      cursor: pointer; white-space: nowrap;
+      transition: all .15s;
+    }
+    .chip.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+    /* ---------- Hero / Tipp des Tages ---------- */
+    .hero {
+      margin: 16px 18px 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      color: #fff;
+      min-height: 230px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.05) 60%),
+        var(--hero-img, linear-gradient(135deg, #ff1f5e, #ff7b3d));
+      background-size: cover; background-position: center;
+      z-index: 0;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .badge {
+      align-self: flex-start;
+      background: var(--accent); color: #fff;
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 5px 11px; border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 900; font-size: 1.6rem; line-height: 1.1;
       letter-spacing: -0.5px;
     }
-    .nav-logo span { color: var(--accent2); }
-    .nav-tab {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 18px 16px;
-      font-size: 0.9rem;
-      border-bottom: 2px solid transparent;
-      transition: all .2s;
-      white-space: nowrap;
-    }
-    .nav-tab:hover { color: var(--text); }
-    .nav-tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
+    .hero .meta { margin-top: 8px; font-size: 0.82rem; opacity: 0.9; }
 
-    /* PAGES */
-    .page { display: none; padding: 32px 24px; max-width: 900px; margin: 0 auto; }
-    .page.active { display: block; }
-
-    /* HERO */
-    .hero {
-      background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 40px;
-      margin-bottom: 32px;
-      text-align: center;
+    /* ---------- Story-Reihe (horizontal) ---------- */
+    .stories { display: flex; gap: 14px; overflow-x: auto; padding: 14px 18px 6px; scrollbar-width: none; }
+    .stories::-webkit-scrollbar { display: none; }
+    .story { flex: none; width: 72px; text-align: center; cursor: pointer; }
+    .story .ring {
+      width: 66px; height: 66px; border-radius: 50%;
+      padding: 3px;
+      background: conic-gradient(from 140deg, var(--accent), #ff7b3d, var(--yellow), var(--accent));
+      display: grid; place-items: center;
     }
-    .hero h1 { font-size: 2rem; margin-bottom: 8px; }
-    .hero h1 span { color: var(--accent); }
-    .hero p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 24px; }
-    .hero-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-    .chip {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 6px 16px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+    .story .ring span {
+      width: 100%; height: 100%; border-radius: 50%;
+      background-size: cover; background-position: center;
+      border: 2px solid #fff;
+      display: block;
     }
-    .chip.accent { border-color: var(--accent); color: var(--accent); }
+    .story p { font-size: 0.7rem; margin-top: 6px; color: var(--text-muted); font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* CARDS */
+    /* ---------- Karten (Artikel) ---------- */
+    .card-scroll { display: flex; gap: 14px; overflow-x: auto; padding: 4px 18px 8px; scrollbar-width: none; }
+    .card-scroll::-webkit-scrollbar { display: none; }
+
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-    .card h2 {
-      font-size: 1.1rem;
-      margin-bottom: 16px;
-      color: var(--accent2);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .card h3 { font-size: 0.95rem; margin: 16px 0 8px; color: var(--text-muted); }
-
-    /* FORMULA BOX */
-    .formula-box {
-      background: var(--surface2);
-      border: 1px solid var(--accent);
-      border-radius: 10px;
-      padding: 20px 24px;
-      margin: 16px 0;
-      text-align: center;
-      font-size: 1.15rem;
-      letter-spacing: 0.5px;
-    }
-    .formula-box .frac {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      vertical-align: middle;
-      margin: 0 4px;
-    }
-    .formula-box .frac span:first-child {
-      border-bottom: 1.5px solid var(--text);
-      padding-bottom: 2px;
-      min-width: 40px;
-      text-align: center;
-    }
-    .formula-box .frac span:last-child {
-      padding-top: 2px;
-      min-width: 40px;
-      text-align: center;
-    }
-
-    /* REACTION EQ */
-    .reaction {
-      font-size: 1.3rem;
-      text-align: center;
-      padding: 16px;
-      background: var(--surface2);
-      border-radius: 8px;
-      margin: 12px 0;
-      letter-spacing: 1px;
-    }
-    .reaction .coeff { color: var(--accent); font-weight: 700; }
-    .reaction .arrow { color: var(--accent2); margin: 0 8px; }
-    .reaction .sub { font-size: 0.75em; vertical-align: sub; }
-
-    /* STEPS */
-    .steps { list-style: none; }
-    .steps li {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-      align-items: flex-start;
-    }
-    .step-num {
-      background: var(--accent);
-      color: white;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .step-content p { font-size: 0.95rem; line-height: 1.6; }
-    .step-content .inline-formula {
-      display: inline-block;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 12px;
-      margin: 8px 0;
-      font-family: monospace;
-      font-size: 0.95rem;
-    }
-
-    /* QUIZ */
-    .quiz-question {
-      font-size: 1.05rem;
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-    .quiz-context {
-      background: var(--surface2);
-      border-left: 3px solid var(--accent);
-      padding: 12px 16px;
-      border-radius: 0 8px 8px 0;
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-      line-height: 1.7;
-    }
-    .quiz-options {
-      display: grid;
-      gap: 10px;
-    }
-    .quiz-option {
-      background: var(--surface2);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 18px;
-      cursor: pointer;
-      transition: all .2s;
-      text-align: left;
-      color: var(--text);
-      font-size: 0.95rem;
-    }
-    .quiz-option:hover:not(:disabled) {
-      border-color: var(--accent);
-      background: var(--surface);
-    }
-    .quiz-option.correct { border-color: var(--success); background: rgba(76,175,130,.1); }
-    .quiz-option.wrong { border-color: var(--warn); background: rgba(255,107,107,.1); }
-    .quiz-option:disabled { cursor: default; }
-    .quiz-feedback {
-      margin-top: 16px;
-      padding: 14px 18px;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      display: none;
-      line-height: 1.6;
-    }
-    .quiz-feedback.show { display: block; }
-    .quiz-feedback.correct { background: rgba(76,175,130,.15); border: 1px solid var(--success); }
-    .quiz-feedback.wrong { background: rgba(255,107,107,.1); border: 1px solid var(--warn); }
-    .quiz-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-    }
-    .progress-bar {
-      height: 4px;
-      background: var(--border);
-      border-radius: 4px;
-      margin-bottom: 24px;
+      border-radius: var(--radius);
       overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 4px;
-      transition: width .4s ease;
-    }
-    .score-badge {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: 0.85rem;
-      color: var(--accent2);
-    }
-
-    /* CALCULATOR */
-    .calc-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    @media (max-width: 600px) { .calc-grid { grid-template-columns: 1fr; } }
-    .input-group { display: flex; flex-direction: column; gap: 6px; }
-    .input-group label { font-size: 0.85rem; color: var(--text-muted); }
-    .input-group input, .input-group select {
-      background: var(--surface2);
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: var(--text);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color .2s;
-    }
-    .input-group input:focus, .input-group select:focus { border-color: var(--accent); }
-    .input-group select option { background: var(--surface2); }
-    .btn {
-      background: var(--accent);
-      border: none;
-      border-radius: 8px;
-      padding: 12px 24px;
-      color: white;
-      font-size: 0.95rem;
-      font-weight: 600;
       cursor: pointer;
-      transition: opacity .2s, transform .1s;
+      transition: transform .12s;
     }
-    .btn:hover { opacity: .85; }
-    .btn:active { transform: scale(.97); }
-    .btn.secondary {
-      background: var(--surface2);
-      border: 1.5px solid var(--border);
-      color: var(--text);
-    }
-    .btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
-    .calc-result {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    .calc-result h3 { color: var(--accent2); margin-bottom: 12px; }
-    .result-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.95rem;
-    }
-    .result-row:last-child { border-bottom: none; }
-    .result-value { color: var(--accent2); font-weight: 600; font-family: monospace; }
-    .calc-steps {
-      margin-top: 16px;
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-      font-family: monospace;
-      white-space: pre-wrap;
-    }
-
-    /* FLASHCARDS */
-    .flashcard-wrap {
-      perspective: 1000px;
-      margin-bottom: 24px;
-    }
-    .flashcard {
-      width: 100%;
-      min-height: 220px;
+    .card:active { transform: scale(0.98); }
+    .card .thumb {
+      height: 150px; background-size: cover; background-position: center;
       position: relative;
-      transform-style: preserve-3d;
-      transition: transform .5s ease;
-      cursor: pointer;
     }
-    .flashcard.flipped { transform: rotateY(180deg); }
-    .flashcard-face {
-      position: absolute;
-      inset: 0;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 32px;
-      text-align: center;
-      backface-visibility: hidden;
+    .card.wide { flex: none; width: 250px; }
+    .card .cat-tag {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(255,255,255,0.95); color: var(--text);
+      font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px;
+      padding: 4px 9px; border-radius: 999px;
     }
-    .flashcard-face.back {
-      transform: rotateY(180deg);
-      background: var(--surface2);
-      border-color: var(--accent);
+    .fav-btn {
+      position: absolute; top: 9px; right: 9px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.92); border: none;
+      display: grid; place-items: center; cursor: pointer;
     }
-    .flashcard-face .label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-muted);
-      margin-bottom: 20px;
+    .fav-btn svg { width: 17px; height: 17px; color: var(--text); }
+    .fav-btn.on svg { color: var(--accent); fill: var(--accent); }
+    .card .body { padding: 13px 14px 16px; }
+    .card .body h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 600; font-size: 1.02rem; line-height: 1.22;
+      letter-spacing: -0.2px;
     }
-    .flashcard-face .face-back-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--accent);
-      margin-bottom: 20px;
+    .card .body .meta {
+      margin-top: 9px; font-size: 0.74rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
     }
-    .flashcard-face .question { font-size: 1.15rem; line-height: 1.6; }
-    .flashcard-face .answer {
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: var(--text);
-    }
-    .flashcard-hint {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      margin-bottom: 16px;
-    }
-    .flashcard-nav {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    .card-counter {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 8px;
-    }
+    .dotsep { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); display: inline-block; }
 
-    /* MISC */
-    .badge {
-      display: inline-block;
-      background: var(--surface2);
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      border-radius: 6px;
-      padding: 2px 10px;
-      font-size: 0.8rem;
-      margin-left: 6px;
+    /* Listen-Karte (Feed) */
+    .list { padding: 6px 18px 0; }
+    .list .card { display: flex; margin-bottom: 14px; }
+    .list .card .thumb { width: 120px; min-width: 120px; height: auto; min-height: 110px; }
+    .list .card .body { flex: 1; padding: 12px 13px; }
+    .list .card .body h3 { font-size: 0.98rem; }
+
+    /* ---------- Event-Karten ---------- */
+    .event {
+      display: flex; gap: 14px; align-items: center;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px; margin-bottom: 12px; cursor: pointer;
     }
-    .tip {
-      background: rgba(108, 99, 255, 0.1);
-      border: 1px solid rgba(108, 99, 255, 0.3);
-      border-radius: 8px;
-      padding: 14px 18px;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-top: 12px;
-      color: var(--text);
+    .event:active { transform: scale(0.99); }
+    .event .date {
+      width: 56px; min-width: 56px; text-align: center;
+      background: var(--accent-soft); border-radius: 12px; padding: 9px 4px;
     }
-    .tip::before { content: "💡 "; }
-    .result-done {
-      text-align: center;
-      padding: 40px 20px;
+    .event .date .d { font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.3rem; color: var(--accent); line-height: 1; }
+    .event .date .m { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; color: var(--accent-dark); margin-top: 3px; }
+    .event .info h3 { font-size: 0.98rem; font-weight: 700; }
+    .event .info .meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* ---------- Kategorien-Grid ---------- */
+    .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 8px 18px; }
+    .cat-tile {
+      border-radius: 16px; height: 110px; padding: 14px; cursor: pointer;
+      display: flex; flex-direction: column; justify-content: space-between;
+      color: #fff; position: relative; overflow: hidden;
+      font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.1rem;
+      box-shadow: var(--shadow);
     }
-    .result-done .big-score {
-      font-size: 3rem;
-      font-weight: 700;
-      color: var(--accent2);
-      margin-bottom: 8px;
+    .cat-tile span.emoji { font-size: 1.5rem; }
+    .cat-tile:active { transform: scale(0.97); }
+
+    /* ---------- Detail-Ansicht ---------- */
+    .detail { display: none; position: absolute; inset: 0; z-index: 80; background: var(--bg); flex-direction: column; }
+    .detail.active { display: flex; }
+    .detail-scroll { flex: 1; overflow-y: auto; padding-bottom: calc(var(--safe-bottom) + 24px); }
+    .detail-hero { height: 300px; background-size: cover; background-position: center; position: relative; }
+    .detail-back {
+      position: absolute; top: calc(var(--safe-top) + 14px); left: 14px;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(255,255,255,0.95); border: none; cursor: pointer;
+      display: grid; place-items: center; box-shadow: var(--shadow);
     }
-    .result-done p { color: var(--text-muted); margin-bottom: 20px; }
+    .detail-back svg { width: 22px; height: 22px; }
+    .detail-body { padding: 22px 20px; }
+    .detail-body .cat-tag {
+      display: inline-block; background: var(--accent-soft); color: var(--accent-dark);
+      font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 5px 11px; border-radius: 999px;
+    }
+    .detail-body h1 {
+      font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.7rem;
+      line-height: 1.15; letter-spacing: -0.5px; margin: 12px 0 10px;
+    }
+    .detail-body .meta { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 6px; }
+    .detail-body p { font-size: 1rem; line-height: 1.65; color: #2b2723; margin-bottom: 16px; }
+    .detail-body h3 { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 900; margin: 22px 0 10px; }
+    .tipps li { font-size: 0.98rem; line-height: 1.55; margin: 0 0 14px 4px; padding-left: 12px;
+      list-style: none; position: relative; }
+    .tipps li::before { content: ""; position: absolute; left: -6px; top: 8px;
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+    .tipps li b { font-weight: 800; }
+
+    /* ---------- Empty / Favoriten ---------- */
+    .empty { text-align: center; padding: 70px 30px; color: var(--text-muted); }
+    .empty .big { font-size: 3rem; margin-bottom: 12px; }
+    .empty h3 { font-family: 'Fraunces', serif; color: var(--text); font-size: 1.2rem; margin-bottom: 8px; }
+
+    /* ---------- Bottom-Navigation ---------- */
+    nav.tabbar {
+      position: sticky; bottom: 0; z-index: 60;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-around; align-items: center;
+      height: var(--nav-h);
+      padding-bottom: var(--safe-bottom);
+    }
+    .tab {
+      flex: 1; background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: var(--text-muted); font-size: 0.62rem; font-weight: 700;
+      padding: 6px 0;
+    }
+    .tab svg { width: 23px; height: 23px; }
+    .tab.active { color: var(--accent); }
+    .tab.active svg { stroke: var(--accent); }
+
+    /* Toast */
+    .toast {
+      position: fixed; left: 50%; bottom: calc(var(--nav-h) + 20px);
+      transform: translateX(-50%) translateY(20px);
+      background: var(--text); color: #fff; font-size: 0.85rem; font-weight: 600;
+      padding: 11px 18px; border-radius: 999px; opacity: 0; pointer-events: none;
+      transition: all .25s; z-index: 200; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Install-Hinweis */
+    .install-bar {
+      display: none;
+      align-items: center; gap: 12px;
+      margin: 16px 18px 0; padding: 13px 15px;
+      background: var(--text); color: #fff; border-radius: 14px;
+    }
+    .install-bar.show { display: flex; }
+    .install-bar p { font-size: 0.82rem; flex: 1; line-height: 1.3; }
+    .install-bar button {
+      background: var(--accent); color: #fff; border: none; border-radius: 999px;
+      padding: 8px 14px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap;
+    }
+    .install-bar .x { background: none; padding: 4px; opacity: 0.7; }
   </style>
 </head>
 <body>
-
-<nav>
-  <div class="nav-logo">Chemie<span>.learn</span></div>
-  <button class="nav-tab active" onclick="showPage('theorie')">Theorie</button>
-  <button class="nav-tab" onclick="showPage('karteikarten')">Karteikarten</button>
-  <button class="nav-tab" onclick="showPage('rechner')">Rechner</button>
-  <button class="nav-tab" onclick="showPage('quiz')">Quiz</button>
-</nav>
-
-<!-- ========== THEORIE ========== -->
-<div class="page active" id="page-theorie">
-  <div class="hero">
-    <h1>Chemisches Rechnen bei <span>Reaktionsgleichungen</span></h1>
-    <p>Lerneinheit 2.4 – Chemie WPF</p>
-    <div class="hero-chips">
-      <span class="chip accent">Stoffmengenverhältnis</span>
-      <span class="chip">Stöchiometrie</span>
-      <span class="chip">Mol-Berechnungen</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>⚖️ Das Stoffmengenverhältnis</h2>
-    <p style="color:var(--text-muted); line-height:1.7; margin-bottom:16px;">
-      Die Zahlen vor den Symbolen in einer Reaktionsgleichung heißen <strong style="color:var(--text)">Koeffizienten</strong>.
-      Sie beschreiben, in welchem Verhältnis die Teilchen reagieren – und damit auch das Verhältnis der Stoffmengen.
-    </p>
-
-    <h3>Allgemeine Formel</h3>
-    <div class="formula-box">
-      <div class="frac"><span>n(A)</span><span>n(B)</span></div>
-      &nbsp;=&nbsp;
-      <div class="frac"><span>Koeffizient vor A</span><span>Koeffizient vor B</span></div>
-    </div>
-
-    <h3>Beispiel-Reaktion</h3>
-    <div class="reaction">
-      <span class="coeff">2</span>A &nbsp;+&nbsp; <span class="coeff">3</span>B
-      <span class="arrow">→</span>
-      <span class="coeff">1</span>C &nbsp;+&nbsp; <span class="coeff">4</span>D
-    </div>
-
-    <h3>Abgeleitete Verhältnisse (bezogen auf A)</h3>
-    <div style="display:grid; gap:10px; margin-top:8px;">
-      <div class="inline-formula" style="display:block; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-family:monospace;">
-        n(B) = <strong style="color:var(--accent2)">3/2</strong> · n(A)&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;n(A) = <strong style="color:var(--accent)">2/3</strong> · n(B)
+  <div class="app" id="app">
+    <!-- ===== Header ===== -->
+    <header>
+      <div class="header-row">
+        <div class="logo" onclick="go('home')" aria-label="Mit Vergnügen">
+          <span class="mit">mit</span><span class="verg">Vergnügen<span class="dot">.</span></span>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button class="city-pill" id="cityBtn" title="Stadt wechseln">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>
+            <span id="cityName">Berlin</span>
+          </button>
+          <button class="icon-btn" onclick="toast('🔔 Keine neuen Mitteilungen')" aria-label="Mitteilungen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </button>
+        </div>
       </div>
-      <div class="inline-formula" style="display:block; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-family:monospace;">
-        n(C) = <strong style="color:var(--accent2)">1/2</strong> · n(A)&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;n(A) = <strong style="color:var(--accent)">2</strong> · n(C)
+      <div class="search" onclick="document.getElementById('searchInput').focus()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="searchInput" placeholder="Restaurants, Events, Tipps suchen …" />
       </div>
-      <div class="inline-formula" style="display:block; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-family:monospace;">
-        n(D) = <strong style="color:var(--accent2)">2</strong> · n(A)&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;n(A) = <strong style="color:var(--accent)">1/2</strong> · n(D)
-      </div>
-    </div>
+    </header>
 
-    <div class="tip">
-      Je größer der Koeffizient vor einem Stoff, desto mehr Mol werden von ihm benötigt (oder gebildet).
-    </div>
-  </div>
+    <!-- ===== Scroll-Content ===== -->
+    <main id="main">
 
-  <div class="card">
-    <h2>📐 Rechenweg Schritt für Schritt</h2>
-    <p style="color:var(--text-muted); margin-bottom:16px; font-size:0.9rem;">
-      Gegeben: 0,3 mol A in der Reaktion <strong style="color:var(--text)">2A + 3B → 1C + 4D</strong>. Gesucht: n(B), n(C), n(D)
-    </p>
-    <ul class="steps">
-      <li>
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <p><strong>Reaktionsgleichung aufschreiben</strong> und Koeffizienten ablesen.</p>
-          <div class="reaction" style="font-size:1rem; padding:10px;">
-            <span class="coeff">2</span>A + <span class="coeff">3</span>B <span class="arrow">→</span> <span class="coeff">1</span>C + <span class="coeff">4</span>D
+      <!-- ===== ENTDECKEN ===== -->
+      <section class="page active" id="page-home">
+        <!-- Install-Hinweis (PWA) -->
+        <div class="install-bar" id="installBar">
+          <p>📲 Mit Vergnügen als App auf den Homescreen legen</p>
+          <button onclick="doInstall()">Installieren</button>
+          <button class="x" onclick="this.parentElement.classList.remove('show')">✕</button>
+        </div>
+
+        <!-- Stories -->
+        <div class="stories" id="stories"></div>
+
+        <!-- Tipp des Tages -->
+        <div class="section">
+          <div class="section-head"><h2>Tipp des Tages</h2></div>
+        </div>
+        <div class="hero" id="heroTip"></div>
+
+        <!-- Kategorie-Chips -->
+        <div class="chips" id="homeChips"></div>
+
+        <!-- Beliebt gerade -->
+        <div class="section"><div class="section-head"><h2>Gerade beliebt</h2><a onclick="go('guides')">Alle</a></div></div>
+        <div class="card-scroll" id="popularScroll"></div>
+
+        <!-- Neu im Magazin -->
+        <div class="section"><div class="section-head"><h2>Neu im Magazin</h2></div></div>
+        <div class="list" id="feedList"></div>
+      </section>
+
+      <!-- ===== GUIDES ===== -->
+      <section class="page" id="page-guides">
+        <div class="section"><div class="section-head"><h2>Guides &amp; Listen</h2></div></div>
+        <div class="chips" id="guideChips"></div>
+        <div class="list" id="guidesList"></div>
+      </section>
+
+      <!-- ===== EVENTS ===== -->
+      <section class="page" id="page-events">
+        <div class="section"><div class="section-head"><h2>Was geht in Berlin</h2></div></div>
+        <div class="chips" id="eventChips"></div>
+        <div class="section" style="padding-top:6px;"><div id="eventList"></div></div>
+      </section>
+
+      <!-- ===== KARTE ===== -->
+      <section class="page" id="page-map">
+        <div class="section"><div class="section-head"><h2>In deiner Nähe</h2></div></div>
+        <div id="mapWrap" style="margin:0 18px; border-radius:var(--radius); overflow:hidden; height:240px; position:relative; box-shadow:var(--shadow); background:linear-gradient(135deg,#ffe3ec,#ffd9c4); display:grid; place-items:center;">
+          <div style="text-align:center; color:#a23; font-weight:700;">
+            <div style="font-size:2.2rem;">🗺️</div>
+            <div style="font-size:0.85rem; margin-top:6px;">Kiez-Karte · Friedrichshain · Kreuzberg</div>
           </div>
         </div>
-      </li>
-      <li>
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <p><strong>Verhältnisformel aufstellen</strong> für den gesuchten Stoff:</p>
-          <div class="inline-formula">n(B) / n(A) = 3 / 2</div>
+        <div class="section"><div class="section-head"><h2>Spots um die Ecke</h2></div></div>
+        <div class="list" id="mapList"></div>
+      </section>
+
+      <!-- ===== FAVORITEN ===== -->
+      <section class="page" id="page-fav">
+        <div class="section"><div class="section-head"><h2>Deine Favoriten</h2></div></div>
+        <div id="favList"></div>
+      </section>
+
+    </main>
+
+    <!-- ===== Detail-Overlay ===== -->
+    <div class="detail" id="detail">
+      <div class="detail-scroll">
+        <div class="detail-hero" id="detailHero">
+          <button class="detail-back" onclick="closeDetail()" aria-label="Zurück">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#14110f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
         </div>
-      </li>
-      <li>
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <p><strong>Umformen und einsetzen:</strong></p>
-          <div class="inline-formula">n(B) = 3/2 · 0,3 mol = <strong style="color:var(--accent2)">0,45 mol</strong></div>
-        </div>
-      </li>
-      <li>
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <p>Gleicher Weg für C und D:</p>
-          <div class="inline-formula">n(C) = 1/2 · 0,3 mol = <strong style="color:var(--accent2)">0,15 mol</strong></div>
-          <div class="inline-formula">n(D) = 4/2 · 0,3 mol = <strong style="color:var(--accent2)">0,6 mol</strong></div>
-        </div>
-      </li>
-    </ul>
+        <div class="detail-body" id="detailBody"></div>
+      </div>
+    </div>
+
+    <!-- ===== Bottom-Nav ===== -->
+    <nav class="tabbar">
+      <button class="tab active" data-tab="home" onclick="go('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Entdecken
+      </button>
+      <button class="tab" data-tab="guides" onclick="go('guides')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/></svg>
+        Guides
+      </button>
+      <button class="tab" data-tab="events" onclick="go('events')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Events
+      </button>
+      <button class="tab" data-tab="map" onclick="go('map')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-7.2-7-12a7 7 0 0114 0c0 4.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Karte
+      </button>
+      <button class="tab" data-tab="fav" onclick="go('fav')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5 5 0 00-7-.2L12 7l-1.8-1.6a5 5 0 10-6.8 7.2L12 21l8.6-8.4a5 5 0 00.2-7z"/></svg>
+        Favoriten
+      </button>
+    </nav>
+
+    <div class="toast" id="toast"></div>
   </div>
 
-  <div class="card">
-    <h2>🔬 Praxisbeispiel: Mg + S → MgS</h2>
-    <p style="color:var(--text-muted); margin-bottom:12px; line-height:1.6;">
-      Aus deinen handschriftlichen Notizen: Magnesium reagiert mit Schwefel zu Magnesiumsulfid.
-    </p>
-    <div class="reaction">
-      Mg &nbsp;+&nbsp; S <span class="arrow">→</span> MgS
-    </div>
-    <p style="margin: 12px 0; font-size:0.9rem; color:var(--text-muted);">
-      Koeffizienten sind jeweils <strong style="color:var(--accent)">1</strong> → 1:1-Verhältnis. Berechnung über Massen mit molarer Masse:
-    </p>
-    <ul class="steps">
-      <li>
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <p>Molare Massen: M(Mg) = 24,3 g/mol &nbsp;|&nbsp; M(S) = 32,1 g/mol</p>
-        </div>
-      </li>
-      <li>
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <p>Gegeben: 0,15 g Mg. Gesucht: Masse von S.</p>
-          <div class="inline-formula">n(Mg) = 0,15 g ÷ 24,3 g/mol ≈ 0,00617 mol</div>
-        </div>
-      </li>
-      <li>
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <p>Da n(Mg) = n(S) (Verhältnis 1:1):</p>
-          <div class="inline-formula">m(S) = 0,00617 mol × 32,1 g/mol ≈ <strong style="color:var(--accent2)">0,198 g</strong></div>
-        </div>
-      </li>
-    </ul>
-    <div class="tip">
-      Dreisatz aus den Notizen: 0,15 g / 24,3 g = x / 32,1 g&nbsp;→&nbsp;x = (0,15 × 32,1) / 24,3 ≈ 0,198 g
-    </div>
-  </div>
-</div>
+  <script>
+  /* =========================================================
+     Mit Vergnügen Berlin – App-Daten & Logik
+     ========================================================= */
 
-<!-- ========== KARTEIKARTEN ========== -->
-<div class="page" id="page-karteikarten">
-  <div class="card" style="margin-bottom:8px;">
-    <h2>🃏 Karteikarten</h2>
-    <p style="color:var(--text-muted); font-size:0.9rem;">Klicke auf die Karte, um die Antwort zu sehen.</p>
-  </div>
+  const IMG = {
+    food:   'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=70',
+    cafe:   'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=70',
+    bar:    'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=70',
+    club:   'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=70',
+    park:   'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&q=70',
+    city:   'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&q=70',
+    brunch: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=800&q=70',
+    art:    'https://images.unsplash.com/photo-1545989253-02cc26577f88?w=800&q=70',
+    market: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=800&q=70',
+    music:  'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=70',
+    coffee: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&q=70',
+    rooftop:'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&q=70'
+  };
 
-  <div class="card-counter" id="fc-counter">Karte 1 von 8</div>
-  <div class="flashcard-wrap">
-    <div class="flashcard" id="flashcard" onclick="flipCard()">
-      <div class="flashcard-face front">
-        <div class="label">Frage</div>
-        <div class="question" id="fc-question"></div>
-      </div>
-      <div class="flashcard-face back">
-        <div class="face-back-label">Antwort</div>
-        <div class="answer" id="fc-answer"></div>
-      </div>
-    </div>
-  </div>
-  <div class="flashcard-hint">👆 Klicken zum Umdrehen</div>
-  <div class="flashcard-nav">
-    <button class="btn secondary" onclick="prevCard()">← Zurück</button>
-    <button class="btn secondary" onclick="nextCard()">Weiter →</button>
-  </div>
-</div>
+  const CATS = [
+    { id: 'essen',  name: 'Essen & Trinken', emoji: '🍝', bg: 'linear-gradient(135deg,#ff5e7e,#ff1f5e)' },
+    { id: 'ausgehen', name: 'Ausgehen',       emoji: '🍸', bg: 'linear-gradient(135deg,#7b5cff,#5e1fff)' },
+    { id: 'kultur', name: 'Kultur',          emoji: '🎨', bg: 'linear-gradient(135deg,#ff9d3d,#ff6a00)' },
+    { id: 'stadt',  name: 'Stadtleben',      emoji: '🏙️', bg: 'linear-gradient(135deg,#21c2a8,#0a9b86)' },
+    { id: 'shopping', name: 'Shopping',       emoji: '🛍️', bg: 'linear-gradient(135deg,#ffce3d,#ffab00)' },
+    { id: 'reise',  name: 'Reisen',          emoji: '🧳', bg: 'linear-gradient(135deg,#3db8ff,#0077ff)' }
+  ];
 
-<!-- ========== RECHNER ========== -->
-<div class="page" id="page-rechner">
-  <div class="card">
-    <h2>🧮 Stoffmengen-Rechner</h2>
-    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
-      Trage die Reaktionsgleichung und eine bekannte Stoffmenge ein – der Rechner berechnet alle anderen.
-    </p>
+  const ARTICLES = [
+    { id:'a1', cat:'essen', tag:'Essen & Trinken', img:IMG.brunch,
+      title:'11 Cafés in Berlin, in denen das Frühstück zur Liebeserklärung wird',
+      author:'Lena', read:'6 Min', date:'Heute',
+      intro:'Berlin und Frühstücken – das ist eine ganz besondere Beziehung. Wir haben elf Orte gefunden, an denen der Sonntagmorgen niemals enden soll.',
+      tipps:[
+        ['Benedict, Charlottenburg','24 Stunden Frühstück – hier gibt es Eggs Benedict auch um 3 Uhr nachts.'],
+        ['Father Carpenter, Mitte','Versteckt im Hinterhof, mit einem Flat White, der dich verzaubert.'],
+        ['Roamers, Neukölln','Avocado-Toast wie aus dem Bilderbuch und Pflanzen, so weit das Auge reicht.'],
+        ['Silo Coffee, Friedrichshain','Australisches Frühstück und der vielleicht beste Banana Bread der Stadt.']
+      ]},
+    { id:'a2', cat:'ausgehen', tag:'Ausgehen', img:IMG.bar,
+      title:'Die 9 schönsten Bars für einen Drink, der den Abend rettet',
+      author:'Jonas', read:'5 Min', date:'Gestern',
+      intro:'Ob feierabendlicher Negroni oder Mitternachts-Mezcal: Diese Bars in Berlin machen jeden Abend zu einer guten Geschichte.',
+      tipps:[
+        ['Buck and Breck, Mitte','Speakeasy-Klassiker hinter unscheinbarer Tür – einfach klingeln.'],
+        ['Velvet, Kreuzberg','Cocktails mit Liebe zum Detail und einer Karte, die ständig überrascht.'],
+        ['Tier, Neukölln','Klein, dunkel, gut. Hier stimmt einfach jeder Drink.']
+      ]},
+    { id:'a3', cat:'stadt', tag:'Stadtleben', img:IMG.park,
+      title:'12 Dinge, die du diesen Sommer in Berlin machen musst',
+      author:'Mit Vergnügen', read:'8 Min', date:'Vor 2 Tagen',
+      intro:'Der Berliner Sommer ist kurz, aber er hat es in sich. Hier ist deine Liste für die schönste Jahreszeit der Stadt.',
+      tipps:[
+        ['Baden im Schlachtensee','Glasklares Wasser im Südwesten – perfekt für einen Tag im Grünen.'],
+        ['Open-Air-Kino am Friedrichshain','Filme unter Sternen, mit Decke und kühlem Getränk.'],
+        ['Kanu-Tour auf der Spree','Berlin vom Wasser aus – entspannter geht es kaum.'],
+        ['Sonnenuntergang auf dem Klunkerkranich','Über den Dächern von Neukölln gibt es den besten Feierabend.']
+      ]},
+    { id:'a4', cat:'ausgehen', tag:'Nightlife', img:IMG.club,
+      title:'Berlins Clubnächte: Wo du am Wochenende wirklich hinmusst',
+      author:'Sami', read:'7 Min', date:'Vor 3 Tagen',
+      intro:'Von Techno-Kathedrale bis kuschelige Kellerbar – die Berliner Nacht hält für jeden etwas bereit.',
+      tipps:[
+        ['Sisyphos','Festival-Gefühl mit Strand, das ganze Wochenende durch.'],
+        ['://about blank','Politisch, divers und mit einem der schönsten Gärten.'],
+        ['Renate','Bunt, verwinkelt und herrlich unprätentiös.']
+      ]},
+    { id:'a5', cat:'kultur', tag:'Kultur', img:IMG.art,
+      title:'8 Ausstellungen, die du im Juni nicht verpassen solltest',
+      author:'Marie', read:'6 Min', date:'Vor 4 Tagen',
+      intro:'Berlin ist eine Stadt der Kunst – und diesen Monat lohnt sich der Museumsbesuch ganz besonders.',
+      tipps:[
+        ['Hamburger Bahnhof','Große Gegenwartskunst in alter Industriehalle.'],
+        ['C/O Berlin','Fotografie, die nachhallt – im Amerika Haus am Zoo.'],
+        ['Berlinische Galerie','Moderne Kunst aus und über Berlin.']
+      ]},
+    { id:'a6', cat:'essen', tag:'Essen & Trinken', img:IMG.food,
+      title:'Diese 10 Restaurants beweisen, dass Berlin kulinarisch alles kann',
+      author:'Theo', read:'9 Min', date:'Vor 5 Tagen',
+      intro:'Von levantinisch bis vietnamesisch: In Berlin isst man sich einmal um die ganze Welt.',
+      tipps:[
+        ['Lode & Stijn, Kreuzberg','Saisonale Küche auf höchstem Niveau, ohne Schnickschnack.'],
+        ['Tisk, Schöneberg','Tschechisch-deutsche Wirtshausküche, modern interpretiert.'],
+        ['CODA, Neukölln','Dessert-Bar mit Stern – Süßes als großes Kino.']
+      ]},
+    { id:'a7', cat:'shopping', tag:'Shopping', img:IMG.market,
+      title:'Die schönsten Flohmärkte für deinen Sonntagsbummel',
+      author:'Nina', read:'5 Min', date:'Vor 6 Tagen',
+      intro:'Trödeln gehört zu Berlin wie die Currywurst. Diese Flohmärkte lohnen das frühe Aufstehen.',
+      tipps:[
+        ['Mauerpark','Der Klassiker – mit Karaoke im Amphitheater.'],
+        ['Boxhagener Platz','Kleiner, feiner, friedrichshainiger.'],
+        ['Arkonaplatz','Vintage-Möbel und Vinyl im Prenzlauer Berg.']
+      ]},
+    { id:'a8', cat:'stadt', tag:'Stadtleben', img:IMG.coffee,
+      title:'7 versteckte Hinterhöfe, die kaum ein Berliner kennt',
+      author:'Mit Vergnügen', read:'4 Min', date:'Vor 1 Woche',
+      intro:'Hinter unscheinbaren Fassaden verstecken sich die schönsten Geheimnisse der Stadt.',
+      tipps:[
+        ['Hackesche Höfe','Jugendstil-Idylle mitten in Mitte.'],
+        ['Heckmann-Höfe','Ruhe und kleine Läden, nur Schritte vom Trubel entfernt.']
+      ]}
+  ];
 
-    <h3>Reaktionsgleichung: aA + bB → cC + dD</h3>
-    <div class="calc-grid" style="margin-top:12px; margin-bottom:20px;">
-      <div class="input-group">
-        <label>Koeffizient a (vor A)</label>
-        <input type="number" id="coeff-a" value="2" min="1" />
-      </div>
-      <div class="input-group">
-        <label>Koeffizient b (vor B)</label>
-        <input type="number" id="coeff-b" value="3" min="1" />
-      </div>
-      <div class="input-group">
-        <label>Koeffizient c (vor C)</label>
-        <input type="number" id="coeff-c" value="1" min="1" />
-      </div>
-      <div class="input-group">
-        <label>Koeffizient d (vor D)</label>
-        <input type="number" id="coeff-d" value="4" min="1" />
-      </div>
-    </div>
+  const EVENTS = [
+    { id:'e1', day:'18', mon:'Jun', cat:'music', title:'Open-Air: Sounds im Mauerpark', where:'Mauerpark · 16:00', img:IMG.music },
+    { id:'e2', day:'19', mon:'Jun', cat:'kultur', title:'Lange Nacht der Museen', where:'Stadtweit · 18:00', img:IMG.art },
+    { id:'e3', day:'20', mon:'Jun', cat:'essen', title:'Streetfood Thursday', where:'Markthalle Neun · 17:00', img:IMG.market },
+    { id:'e4', day:'21', mon:'Jun', cat:'ausgehen', title:'Rooftop Sundowner', where:'Klunkerkranich · 19:00', img:IMG.rooftop },
+    { id:'e5', day:'22', mon:'Jun', cat:'stadt', title:'Fête de la Musique', where:'Stadtweit · ganztägig', img:IMG.music },
+    { id:'e6', day:'24', mon:'Jun', cat:'kultur', title:'Lesung am Wasser', where:'Holzmarkt · 20:00', img:IMG.city }
+  ];
 
-    <h3>Bekannte Größe</h3>
-    <div class="calc-grid" style="margin-top:12px; margin-bottom:20px;">
-      <div class="input-group">
-        <label>Stoff</label>
-        <select id="known-substance">
-          <option value="a">A</option>
-          <option value="b">B</option>
-          <option value="c">C</option>
-          <option value="d">D</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label>Stoffmenge n (in mol)</label>
-        <input type="number" id="known-amount" value="0.3" step="0.01" min="0" />
-      </div>
-    </div>
+  const EVENT_FILTERS = [
+    {id:'all', name:'Alle'}, {id:'music', name:'Musik'}, {id:'kultur', name:'Kultur'},
+    {id:'essen', name:'Food'}, {id:'ausgehen', name:'Party'}, {id:'stadt', name:'Stadt'}
+  ];
 
-    <button class="btn" onclick="calculate()">Berechnen</button>
+  /* ---------- State ---------- */
+  let favs = JSON.parse(localStorage.getItem('mv_favs') || '[]');
+  let activeCat = 'all';
+  const byId = id => ARTICLES.find(a => a.id === id);
 
-    <div class="calc-result" id="calc-result" style="display:none;">
-      <h3>Ergebnisse</h3>
-      <div id="result-rows"></div>
-      <div class="calc-steps" id="calc-steps"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>⚗️ Masse-Rechner (Mg + S → MgS)</h2>
-    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
-      Basierend auf deinem Beispiel aus den Notizen.
-    </p>
-    <div class="calc-grid">
-      <div class="input-group">
-        <label>Masse von Mg (g)</label>
-        <input type="number" id="mg-mass" value="0.15" step="0.01" min="0" />
-      </div>
-      <div class="input-group" style="align-self:end;">
-        <button class="btn" onclick="calcMgS()" style="width:100%;">Berechnen</button>
-      </div>
-    </div>
-    <div class="calc-result" id="mgs-result" style="display:none; margin-top:16px;">
-      <h3>Ergebnis</h3>
-      <div id="mgs-rows"></div>
-      <div class="calc-steps" id="mgs-steps"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ========== QUIZ ========== -->
-<div class="page" id="page-quiz">
-  <div class="card" id="quiz-container">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <h2 style="margin-bottom:0;">🧪 Quiz</h2>
-      <span class="score-badge" id="quiz-score">0 / 0 richtig</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
-    <div id="quiz-content"></div>
-  </div>
-</div>
-
-<script>
-// ============ NAVIGATION ============
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  event.target.classList.add('active');
-  if (id === 'quiz' && !quizStarted) initQuiz();
-  if (id === 'karteikarten') renderCard();
-}
-
-// ============ FLASHCARDS ============
-const flashcards = [
-  {
-    q: "Was gibt das Stoffmengenverhältnis an?",
-    a: "Das Verhältnis der Koeffizienten in einer Reaktionsgleichung entspricht dem Verhältnis der Stoffmengen der beteiligten Stoffe."
-  },
-  {
-    q: "Wie lautet die allgemeine Formel für das Stoffmengenverhältnis von A zu B?",
-    a: "n(A) / n(B) = Koeffizient vor A / Koeffizient vor B"
-  },
-  {
-    q: "In der Reaktion 2A + 3B → C + 4D: Wie viel mol B werden benötigt, wenn 0,3 mol A eingesetzt werden?",
-    a: "n(B) = 3/2 · 0,3 mol = 0,45 mol\n(Verhältnis A:B = 2:3)"
-  },
-  {
-    q: "Was ist die molare Masse von Magnesium (Mg)?",
-    a: "M(Mg) ≈ 24,3 g/mol\n(abzulesen aus dem Periodensystem)"
-  },
-  {
-    q: "Mg + S → MgS: In welchem Verhältnis reagieren Mg und S?",
-    a: "1 : 1 (beide Koeffizienten sind 1)\n→ n(Mg) = n(S)"
-  },
-  {
-    q: "In der Reaktion 2A + 3B → 1C + 4D: Wie viel mol C entstehen aus 0,3 mol A?",
-    a: "n(C) = 1/2 · 0,3 mol = 0,15 mol\n(Verhältnis A:C = 2:1)"
-  },
-  {
-    q: "Wie rechnet man von der Masse eines Stoffes auf die Stoffmenge um?",
-    a: "n = m / M\n• n = Stoffmenge in mol\n• m = Masse in g\n• M = Molare Masse in g/mol"
-  },
-  {
-    q: "Was sind Koeffizienten in einer Reaktionsgleichung?",
-    a: "Die Zahlen vor den Elementen/Verbindungen (z.B. die 2 in 2H₂O). Sie geben das Teilchen- und Stoffmengenverhältnis an."
+  /* ---------- Helpers ---------- */
+  function esc(s){ return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function isFav(id){ return favs.includes(id); }
+  function toggleFav(id, e){
+    if(e){ e.stopPropagation(); }
+    if(isFav(id)){ favs = favs.filter(f => f !== id); toast('Aus Favoriten entfernt'); }
+    else { favs.push(id); toast('❤️ Zu Favoriten hinzugefügt'); }
+    localStorage.setItem('mv_favs', JSON.stringify(favs));
+    renderAll();
   }
-];
-
-let fcIndex = 0;
-function renderCard() {
-  const card = flashcards[fcIndex];
-  document.getElementById('fc-question').textContent = card.q;
-  document.getElementById('fc-answer').textContent = card.a;
-  document.getElementById('fc-counter').textContent = `Karte ${fcIndex + 1} von ${flashcards.length}`;
-  document.getElementById('flashcard').classList.remove('flipped');
-}
-function flipCard() {
-  document.getElementById('flashcard').classList.toggle('flipped');
-}
-function nextCard() {
-  fcIndex = (fcIndex + 1) % flashcards.length;
-  renderCard();
-}
-function prevCard() {
-  fcIndex = (fcIndex - 1 + flashcards.length) % flashcards.length;
-  renderCard();
-}
-renderCard();
-
-// ============ CALCULATOR ============
-function calculate() {
-  const a = parseFloat(document.getElementById('coeff-a').value);
-  const b = parseFloat(document.getElementById('coeff-b').value);
-  const c = parseFloat(document.getElementById('coeff-c').value);
-  const d = parseFloat(document.getElementById('coeff-d').value);
-  const substance = document.getElementById('known-substance').value;
-  const amount = parseFloat(document.getElementById('known-amount').value);
-
-  if (isNaN(a)||isNaN(b)||isNaN(c)||isNaN(d)||isNaN(amount)) return;
-
-  const coeffs = { a, b, c, d };
-  const names = { a: 'A', b: 'B', c: 'C', d: 'D' };
-  const knownCoeff = coeffs[substance];
-
-  const results = {};
-  for (const key of ['a','b','c','d']) {
-    results[key] = (coeffs[key] / knownCoeff) * amount;
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(window._tt); window._tt = setTimeout(()=>t.classList.remove('show'), 1900);
   }
 
-  const rowsEl = document.getElementById('result-rows');
-  rowsEl.innerHTML = '';
-  for (const key of ['a','b','c','d']) {
-    const row = document.createElement('div');
-    row.className = 'result-row';
-    row.innerHTML = `<span>n(${names[key]})</span><span class="result-value">${results[key].toFixed(4)} mol</span>`;
-    rowsEl.appendChild(row);
+  const heartSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5 5 0 00-7-.2L12 7l-1.8-1.6a5 5 0 10-6.8 7.2L12 21l8.6-8.4a5 5 0 00.2-7z"/></svg>';
+
+  function articleCard(a, wide){
+    return `<article class="card ${wide?'wide':''}" onclick="openDetail('${a.id}')">
+      <div class="thumb" style="background-image:url('${a.img}')">
+        <span class="cat-tag">${esc(a.tag)}</span>
+        <button class="fav-btn ${isFav(a.id)?'on':''}" onclick="toggleFav('${a.id}', event)" aria-label="Merken">${heartSVG}</button>
+      </div>
+      <div class="body">
+        <h3>${esc(a.title)}</h3>
+        <div class="meta">${esc(a.author)} <span class="dotsep"></span> ${esc(a.read)} <span class="dotsep"></span> ${esc(a.date)}</div>
+      </div>
+    </article>`;
   }
 
-  let steps = `Gegeben: n(${names[substance]}) = ${amount} mol\n`;
-  steps += `Koeffizienten: a=${a}, b=${b}, c=${c}, d=${d}\n\n`;
-  for (const key of ['a','b','c','d']) {
-    if (key !== substance) {
-      steps += `n(${names[key]}) = ${coeffs[key]}/${knownCoeff} × ${amount} = ${results[key].toFixed(4)} mol\n`;
+  /* ---------- Renderer ---------- */
+  function renderStories(){
+    const items = CATS.slice(0,6);
+    document.getElementById('stories').innerHTML = items.map(c => {
+      const a = ARTICLES.find(x => x.cat === c.id) || ARTICLES[0];
+      return `<div class="story" onclick="go('home'); filterCat('${c.id}')">
+        <div class="ring"><span style="background-image:url('${a.img}')"></span></div>
+        <p>${esc(c.name.split(' ')[0])}</p>
+      </div>`;
+    }).join('');
+  }
+
+  function renderHero(){
+    const a = ARTICLES[2];
+    document.getElementById('heroTip').style.setProperty('--hero-img', `url('${a.img}')`);
+    document.getElementById('heroTip').innerHTML = `
+      <span class="badge">Heute empfohlen</span>
+      <h1>${esc(a.title)}</h1>
+      <div class="meta">${esc(a.read)} Lesezeit · von ${esc(a.author)}</div>`;
+    document.getElementById('heroTip').onclick = () => openDetail(a.id);
+  }
+
+  function renderChips(){
+    const html = `<button class="chip ${activeCat==='all'?'active':''}" onclick="filterCat('all')">Für dich</button>` +
+      CATS.map(c => `<button class="chip ${activeCat===c.id?'active':''}" onclick="filterCat('${c.id}')">${c.emoji} ${esc(c.name)}</button>`).join('');
+    document.getElementById('homeChips').innerHTML = html;
+  }
+
+  function filterCat(id){ activeCat = id; renderChips(); renderPopular(); renderFeed(); }
+
+  function filtered(){
+    return activeCat === 'all' ? ARTICLES : ARTICLES.filter(a => a.cat === activeCat);
+  }
+
+  function renderPopular(){
+    const list = filtered().slice(0, 6);
+    document.getElementById('popularScroll').innerHTML = list.map(a => articleCard(a, true)).join('') ||
+      '<p style="color:var(--text-muted); padding:0 18px;">Nichts gefunden.</p>';
+  }
+
+  function renderFeed(){
+    document.getElementById('feedList').innerHTML = filtered().map(a => articleCard(a)).join('');
+  }
+
+  function renderGuides(){
+    document.getElementById('guideChips').innerHTML =
+      `<button class="chip ${activeCat==='all'?'active':''}" onclick="filterCatGuides('all')">Alle</button>` +
+      CATS.map(c => `<button class="chip ${activeCat===c.id?'active':''}" onclick="filterCatGuides('${c.id}')">${esc(c.name)}</button>`).join('');
+    const list = activeCat==='all' ? ARTICLES : ARTICLES.filter(a=>a.cat===activeCat);
+    document.getElementById('guidesList').innerHTML = list.map(a => articleCard(a)).join('');
+  }
+  function filterCatGuides(id){ activeCat = id; renderGuides(); }
+
+  function renderEvents(){
+    document.getElementById('eventChips').innerHTML = EVENT_FILTERS.map(f =>
+      `<button class="chip ${window._ef===f.id||(!window._ef&&f.id==='all')?'active':''}" onclick="filterEvents('${f.id}')">${esc(f.name)}</button>`).join('');
+    const ef = window._ef || 'all';
+    const list = ef==='all' ? EVENTS : EVENTS.filter(e => e.cat === ef);
+    document.getElementById('eventList').innerHTML = list.map(e => `
+      <div class="event" onclick="toast('🎟️ ${esc(e.title)} – im Kalender gespeichert')">
+        <div class="date"><div class="d">${e.day}</div><div class="m">${esc(e.mon)}</div></div>
+        <div class="info"><h3>${esc(e.title)}</h3><div class="meta">${esc(e.where)}</div></div>
+      </div>`).join('');
+  }
+  function filterEvents(id){ window._ef = id; renderEvents(); }
+
+  function renderMap(){
+    document.getElementById('mapList').innerHTML = ARTICLES.filter(a=>['essen','ausgehen'].includes(a.cat)).slice(0,5).map(a => articleCard(a)).join('');
+  }
+
+  function renderFav(){
+    const el = document.getElementById('favList');
+    if(!favs.length){
+      el.innerHTML = `<div class="empty"><div class="big">❤️</div><h3>Noch keine Favoriten</h3>
+        <p>Tippe auf das Herz bei einem Artikel, um ihn hier zu sammeln.</p></div>`;
+      return;
     }
+    el.innerHTML = `<div class="list">${favs.map(id => { const a = byId(id); return a ? articleCard(a) : ''; }).join('')}</div>`;
   }
-  document.getElementById('calc-steps').textContent = steps;
-  document.getElementById('calc-result').style.display = 'block';
-}
 
-function calcMgS() {
-  const mMg = parseFloat(document.getElementById('mg-mass').value);
-  if (isNaN(mMg) || mMg <= 0) return;
-  const MMg = 24.305, MS = 32.06, MMgS = 56.365;
-  const nMg = mMg / MMg;
-  const nS = nMg;
-  const mS = nS * MS;
-  const mMgS = nMg * MMgS;
-
-  const rowsEl = document.getElementById('mgs-rows');
-  rowsEl.innerHTML = `
-    <div class="result-row"><span>n(Mg)</span><span class="result-value">${nMg.toFixed(5)} mol</span></div>
-    <div class="result-row"><span>n(S) = n(Mg)</span><span class="result-value">${nS.toFixed(5)} mol</span></div>
-    <div class="result-row"><span>m(S)</span><span class="result-value">${mS.toFixed(4)} g</span></div>
-    <div class="result-row"><span>m(MgS) gebildet</span><span class="result-value">${mMgS.toFixed(4)} g</span></div>
-  `;
-
-  document.getElementById('mgs-steps').textContent =
-    `n(Mg) = ${mMg} g ÷ 24,305 g/mol = ${nMg.toFixed(5)} mol
-Mg : S = 1 : 1 → n(S) = ${nS.toFixed(5)} mol
-m(S) = ${nS.toFixed(5)} mol × 32,06 g/mol = ${mS.toFixed(4)} g
-m(MgS) = ${nMg.toFixed(5)} mol × 56,365 g/mol = ${mMgS.toFixed(4)} g
-
-Dreisatz (wie in den Notizen):
-${mMg} g / 24,305 g = x / 32,06 g
-x = (${mMg} × 32,06) / 24,305 = ${mS.toFixed(4)} g`;
-
-  document.getElementById('mgs-result').style.display = 'block';
-}
-
-// ============ QUIZ ============
-const questions = [
-  {
-    q: "In der Reaktion 2A + 3B → C + 4D werden 0,3 mol A eingesetzt. Wie viel mol B werden benötigt?",
-    context: "Reaktionsgleichung: 2A + 3B → 1C + 4D\nn(A) = 0,3 mol",
-    options: ["0,2 mol", "0,45 mol", "0,6 mol", "0,9 mol"],
-    correct: 1,
-    explanation: "n(B)/n(A) = 3/2 → n(B) = 3/2 · 0,3 = 0,45 mol. Das Koeffizientenverhältnis A:B = 2:3 wird auf die Stoffmenge übertragen."
-  },
-  {
-    q: "In der gleichen Reaktion: Wie viel mol C entstehen?",
-    context: "Reaktionsgleichung: 2A + 3B → 1C + 4D\nn(A) = 0,3 mol",
-    options: ["0,3 mol", "0,6 mol", "0,15 mol", "1,2 mol"],
-    correct: 2,
-    explanation: "n(C)/n(A) = 1/2 → n(C) = 1/2 · 0,3 = 0,15 mol. A:C = 2:1, daher entsteht halb so viel C wie A eingesetzt wird."
-  },
-  {
-    q: "Wie lautet die Formel für das Stoffmengenverhältnis von Stoff A zu Stoff B?",
-    context: "Allgemeine Reaktion: aA + bB → ...",
-    options: [
-      "n(A)/n(B) = n(B)/n(A)",
-      "n(A)/n(B) = Koeffizient_A / Koeffizient_B",
-      "n(A) · n(B) = Koeffizient_A · Koeffizient_B",
-      "n(A) = n(B) immer"
-    ],
-    correct: 1,
-    explanation: "Die Stoffmengen verhalten sich wie die Koeffizienten: n(A)/n(B) = a/b. Dies ist das Grundprinzip der Stöchiometrie."
-  },
-  {
-    q: "Welche Masse Schwefel (S) reagiert mit 0,15 g Magnesium (Mg)?\nM(Mg) = 24,3 g/mol | M(S) = 32,1 g/mol",
-    context: "Mg + S → MgS\nKoeffizientenverhältnis: 1:1",
-    options: ["0,15 g", "0,198 g", "0,32 g", "0,242 g"],
-    correct: 1,
-    explanation: "n(Mg) = 0,15/24,3 ≈ 0,00617 mol. Da n(Mg) = n(S): m(S) = 0,00617 · 32,1 ≈ 0,198 g. Dreisatz: 0,15/24,3 = x/32,1 → x ≈ 0,198 g."
-  },
-  {
-    q: "In der Reaktion 2A + 3B → 1C + 4D: Wie viel mol D entstehen aus 0,3 mol A?",
-    context: "n(A) = 0,3 mol",
-    options: ["0,15 mol", "0,3 mol", "0,45 mol", "0,6 mol"],
-    correct: 3,
-    explanation: "n(D)/n(A) = 4/2 = 2 → n(D) = 2 · 0,3 = 0,6 mol. Der Koeffizient 4 vor D geteilt durch den Koeffizient 2 vor A ergibt den Faktor 2."
-  },
-  {
-    q: "Was bedeuten die Koeffizienten in einer Reaktionsgleichung?",
-    options: [
-      "Die Anzahl der Protonen im Atom",
-      "Das Verhältnis der Massen der Stoffe",
-      "Das Verhältnis der Teilchen- und Stoffmengen der Reaktionspartner",
-      "Die Reaktionstemperatur in Kelvin"
-    ],
-    correct: 2,
-    explanation: "Koeffizienten geben das Verhältnis an, in dem Teilchen miteinander reagieren. Da die Stoffmenge n proportional zur Teilchenzahl ist, entspricht dies auch dem Stoffmengenverhältnis."
-  },
-  {
-    q: "Wenn n(A) = 0,6 mol und n(B) = 0,9 mol, welches Koeffizientenverhältnis A:B passt dazu?",
-    context: "Welche Reaktionsgleichung ist korrekt?",
-    options: ["1A + 1B →", "3A + 2B →", "2A + 3B →", "4A + 3B →"],
-    correct: 2,
-    explanation: "n(A)/n(B) = 0,6/0,9 = 2/3 → Koeffizienten A:B = 2:3. Daher: 2A + 3B → ..."
+  function renderAll(){
+    renderStories(); renderHero(); renderChips(); renderPopular(); renderFeed();
+    renderGuides(); renderEvents(); renderMap(); renderFav();
   }
-];
 
-let quizIndex = 0, quizScore = 0, quizStarted = false, answered = false;
-
-function initQuiz() {
-  quizStarted = true;
-  quizIndex = 0;
-  quizScore = 0;
-  answered = false;
-  renderQuestion();
-}
-
-function renderQuestion() {
-  if (quizIndex >= questions.length) {
-    showResult();
-    return;
+  /* ---------- Navigation ---------- */
+  function go(tab){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + tab).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    document.getElementById('main').scrollTo({ top: 0 });
+    closeDetail();
   }
-  answered = false;
-  const q = questions[quizIndex];
-  const pct = (quizIndex / questions.length) * 100;
-  document.getElementById('quiz-progress').style.width = pct + '%';
-  document.getElementById('quiz-score').textContent = `${quizScore} / ${quizIndex} richtig`;
 
-  let html = `<div class="quiz-question"><strong>Frage ${quizIndex + 1} / ${questions.length}:</strong> ${q.q.replace(/\n/g,'<br>')}</div>`;
-  if (q.context) html += `<div class="quiz-context">${q.context.replace(/\n/g,'<br>')}</div>`;
-  html += `<div class="quiz-options">`;
-  q.options.forEach((opt, i) => {
-    html += `<button class="quiz-option" id="opt-${i}" onclick="answer(${i})">${opt}</button>`;
-  });
-  html += `</div>`;
-  html += `<div class="quiz-feedback" id="feedback"></div>`;
-  html += `<div class="quiz-nav"><span></span><button class="btn" id="next-btn" onclick="nextQ()" style="display:none;">Nächste Frage →</button></div>`;
-  document.getElementById('quiz-content').innerHTML = html;
-}
+  /* ---------- Detail ---------- */
+  function openDetail(id){
+    const a = byId(id); if(!a) return;
+    document.getElementById('detailHero').style.backgroundImage = `url('${a.img}')`;
+    document.getElementById('detailBody').innerHTML = `
+      <span class="cat-tag">${esc(a.tag)}</span>
+      <h1>${esc(a.title)}</h1>
+      <div class="meta">von ${esc(a.author)} <span class="dotsep"></span> ${esc(a.read)} Lesezeit <span class="dotsep"></span> ${esc(a.date)}</div>
+      <p>${esc(a.intro)}</p>
+      <h3>Unsere Tipps</h3>
+      <ol class="tipps">${a.tipps.map((t,i)=>`<li><b>${i+1}. ${esc(t[0])}</b><br>${esc(t[1])}</li>`).join('')}</ol>
+      <div style="display:flex; gap:10px; margin-top:24px;">
+        <button onclick="toggleFav('${a.id}')" style="flex:1; padding:13px; border-radius:999px; border:none; cursor:pointer; font-weight:700; font-size:0.92rem; background:${isFav(a.id)?'var(--accent)':'var(--text)'}; color:#fff;">
+          ${isFav(a.id)?'❤️ Gemerkt':'♡ Merken'}
+        </button>
+        <button onclick="shareArticle('${a.id}')" style="padding:13px 18px; border-radius:999px; border:1px solid var(--border); background:#fff; cursor:pointer; font-weight:700;">Teilen</button>
+      </div>
+      <p style="margin-top:28px; font-size:0.8rem; color:var(--text-muted);">© Mit Vergnügen Berlin · Demonstrations-Inhalte</p>`;
+    document.getElementById('detail').classList.add('active');
+    document.querySelector('.detail-scroll').scrollTo({top:0});
+  }
+  function closeDetail(){ document.getElementById('detail').classList.remove('active'); }
 
-function answer(selected) {
-  if (answered) return;
-  answered = true;
-  const q = questions[quizIndex];
-  const isCorrect = selected === q.correct;
-  if (isCorrect) quizScore++;
+  async function shareArticle(id){
+    const a = byId(id);
+    const data = { title: a.title, text: a.intro, url: location.href };
+    if(navigator.share){ try { await navigator.share(data); } catch(e){} }
+    else { toast('🔗 Link kopiert'); try { await navigator.clipboard.writeText(location.href); } catch(e){} }
+  }
 
-  document.querySelectorAll('.quiz-option').forEach((btn, i) => {
-    btn.disabled = true;
-    if (i === q.correct) btn.classList.add('correct');
-    else if (i === selected && !isCorrect) btn.classList.add('wrong');
+  /* ---------- Suche ---------- */
+  document.getElementById('searchInput').addEventListener('input', function(){
+    const q = this.value.trim().toLowerCase();
+    go('home');
+    if(!q){ activeCat='all'; renderPopular(); renderFeed(); return; }
+    const res = ARTICLES.filter(a => (a.title + a.tag + a.intro).toLowerCase().includes(q));
+    document.getElementById('feedList').innerHTML = res.length
+      ? res.map(a => articleCard(a)).join('')
+      : `<div class="empty"><div class="big">🔍</div><h3>Nichts gefunden</h3><p>Probier’s mal mit „Frühstück", „Bar" oder „Sommer".</p></div>`;
+    document.getElementById('popularScroll').innerHTML = '';
   });
 
-  const fb = document.getElementById('feedback');
-  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
-  fb.innerHTML = (isCorrect ? '✅ Richtig! ' : '❌ Leider falsch. ') + q.explanation;
+  /* ---------- Stadt-Wähler ---------- */
+  const CITIES = ['Berlin','Hamburg','München','Köln'];
+  document.getElementById('cityBtn').addEventListener('click', () => {
+    const cur = document.getElementById('cityName').textContent;
+    const next = CITIES[(CITIES.indexOf(cur)+1) % CITIES.length];
+    document.getElementById('cityName').textContent = next;
+    toast('📍 Stadt: ' + next);
+  });
 
-  document.getElementById('next-btn').style.display = 'block';
-  document.getElementById('quiz-score').textContent = `${quizScore} / ${quizIndex + 1} richtig`;
-}
+  /* ---------- Kategorie-Grid in Guides (oben) ---------- */
+  // (Chips übernehmen die Kategorie-Auswahl)
 
-function nextQ() {
-  quizIndex++;
-  renderQuestion();
-}
+  /* ---------- PWA Install ---------- */
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault(); deferredPrompt = e;
+    document.getElementById('installBar').classList.add('show');
+  });
+  function doInstall(){
+    if(!deferredPrompt){ toast('Über das Browser-Menü „Zum Home-Bildschirm"'); return; }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(()=>{ deferredPrompt=null; document.getElementById('installBar').classList.remove('show'); });
+  }
 
-function showResult() {
-  document.getElementById('quiz-progress').style.width = '100%';
-  const pct = Math.round((quizScore / questions.length) * 100);
-  let msg = pct >= 80 ? '🎉 Ausgezeichnet! Du beherrschst das Stoffmengenverhältnis!' :
-            pct >= 60 ? '👍 Gut gemacht! Schau dir nochmal die Theorie an.' :
-            '📚 Übe nochmal mit den Karteikarten und dem Rechner.';
-  document.getElementById('quiz-content').innerHTML = `
-    <div class="result-done">
-      <div class="big-score">${quizScore} / ${questions.length}</div>
-      <div style="font-size:1.5rem; margin-bottom:8px;">${pct}%</div>
-      <p>${msg}</p>
-      <button class="btn" onclick="initQuiz()">Quiz wiederholen</button>
-    </div>
-  `;
-}
-</script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  }
+
+  /* ---------- Init ---------- */
+  renderAll();
+  </script>
 </body>
 </html>

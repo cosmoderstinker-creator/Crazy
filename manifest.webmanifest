@@ -1,0 +1,21 @@
+{
+  "name": "Mit Vergnügen Berlin",
+  "short_name": "Mit Vergnügen",
+  "description": "Dein Freund in der Großstadt – die besten Tipps zum Essen, Trinken, Ausgehen und Erleben in Berlin.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "lang": "de",
+  "categories": ["lifestyle", "entertainment", "food", "travel"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
