@@ -1,8 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="112" fill="#ffffff"/>
-  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle">
-    <text x="256" y="232" font-size="120" font-style="italic" font-weight="600" fill="#14110f">mit</text>
-    <text x="256" y="340" font-size="92" font-weight="900" fill="#14110f" letter-spacing="-3">Vergnügen</text>
+  <rect width="512" height="512" rx="112" fill="#ffe200"/>
+  <g transform="rotate(-5 256 256)" font-family="'Brush Script MT','Segoe Script',cursive" fill="#141414" text-anchor="middle">
+    <text x="245" y="232" font-size="120" font-weight="600">Mit</text>
+    <text x="256" y="352" font-size="150" font-weight="700">Vergnügen</text>
   </g>
-  <circle cx="430" cy="330" r="20" fill="#ff1f5e"/>
 </svg>

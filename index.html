@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#ffe200" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Mit Vergnügen" />
@@ -14,21 +14,24 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:opsz,wght@9..144,600;9..144,900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      /* Mit-Vergnügen-inspirierte Palette: clean weiß, kräftiges Schwarz, Signature-Pink */
+      /* Mit-Vergnügen-Palette: Signature-Gelb, Schwarz, Weiß (+ Lila-Akzent) */
       --bg: #ffffff;
       --surface: #ffffff;
-      --surface-2: #f7f6f4;
-      --text: #14110f;
+      --surface-2: #f5f4f1;
+      --text: #141414;
       --text-muted: #6f6a64;
-      --border: #ececea;
-      --accent: #ff1f5e;        /* Signature-Pink */
-      --accent-dark: #e00049;
-      --accent-soft: #fff0f4;
-      --yellow: #ffd23f;
+      --border: #e7e6e2;
+      --brand: #ffe200;         /* Signature-Gelb (Navbar) */
+      --brand-dark: #f2d200;
+      --accent: #141414;        /* Schwarz: Buttons & aktive Zustände */
+      --accent-dark: #000000;
+      --accent-soft: #fff6b3;   /* helles Gelb */
+      --purple: #6c2bd9;        /* Sekundär-Akzent (wie Promo-Banner) */
+      --yellow: #ffe200;
       --shadow: 0 8px 30px rgba(20, 17, 15, 0.08);
       --radius: 18px;
       --safe-top: env(safe-area-inset-top, 0px);
@@ -67,10 +70,8 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: saturate(180%) blur(12px);
-      -webkit-backdrop-filter: saturate(180%) blur(12px);
-      border-bottom: 1px solid var(--border);
+      background: var(--brand);
+      border-bottom: 2px solid var(--text);
       padding: calc(var(--safe-top) + 12px) 18px 12px;
     }
     .header-row {
@@ -80,34 +81,34 @@
       gap: 12px;
     }
 
-    /* Logo-Schriftzug "mit Vergnügen" (CSS-Rekonstruktion) */
+    /* Logo: handgeschriebener Signatur-Schriftzug "Mit Vergnügen" */
     .logo {
       display: inline-flex;
-      align-items: baseline;
-      gap: 5px;
-      font-family: 'Fraunces', Georgia, serif;
-      line-height: 1;
+      flex-direction: column;
+      align-items: flex-start;
+      font-family: 'Caveat', cursive;
+      line-height: 0.78;
+      color: var(--text);
       cursor: pointer;
       user-select: none;
+      transform: rotate(-3deg);
+      padding: 2px 0;
     }
-    .logo .mit {
+    .logo .l1 {
       font-weight: 600;
-      font-size: 1.02rem;
-      font-style: italic;
-      color: var(--text);
+      font-size: 1.15rem;
+      margin-left: 2px;
     }
-    .logo .verg {
-      font-weight: 900;
-      font-size: 1.5rem;
+    .logo .l2 {
+      font-weight: 700;
+      font-size: 1.95rem;
       letter-spacing: -0.5px;
-      color: var(--text);
     }
-    .logo .dot { color: var(--accent); }
 
     .icon-btn {
       width: 40px; height: 40px;
       border-radius: 50%;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--text);
       background: var(--surface);
       display: grid; place-items: center;
       cursor: pointer;
@@ -131,8 +132,8 @@
     .search {
       margin-top: 12px;
       display: flex; align-items: center; gap: 10px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
+      background: var(--surface);
+      border: 1.5px solid var(--text);
       border-radius: 14px;
       padding: 11px 14px;
     }
@@ -161,7 +162,7 @@
       margin-bottom: 14px;
     }
     .section-head h2 {
-      font-family: 'Fraunces', serif;
+      font-family: 'Inter', system-ui, sans-serif;
       font-weight: 900; font-size: 1.35rem; letter-spacing: -0.3px;
     }
     .section-head a { color: var(--accent); font-size: 0.82rem; font-weight: 700; text-decoration: none; }
@@ -201,7 +202,7 @@
       content: ""; position: absolute; inset: 0;
       background:
         linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.05) 60%),
-        var(--hero-img, linear-gradient(135deg, #ff1f5e, #ff7b3d));
+        var(--hero-img, linear-gradient(135deg, #ffe200, #f2b600));
       background-size: cover; background-position: center;
       z-index: 0;
     }
@@ -215,7 +216,7 @@
       margin-bottom: 10px;
     }
     .hero h1 {
-      font-family: 'Fraunces', serif;
+      font-family: 'Inter', system-ui, sans-serif;
       font-weight: 900; font-size: 1.6rem; line-height: 1.1;
       letter-spacing: -0.5px;
     }
@@ -228,7 +229,7 @@
     .story .ring {
       width: 66px; height: 66px; border-radius: 50%;
       padding: 3px;
-      background: conic-gradient(from 140deg, var(--accent), #ff7b3d, var(--yellow), var(--accent));
+      background: conic-gradient(from 140deg, var(--brand), #141414, var(--brand), #141414, var(--brand));
       display: grid; place-items: center;
     }
     .story .ring span {
@@ -274,7 +275,7 @@
     .fav-btn.on svg { color: var(--accent); fill: var(--accent); }
     .card .body { padding: 13px 14px 16px; }
     .card .body h3 {
-      font-family: 'Fraunces', serif;
+      font-family: 'Inter', system-ui, sans-serif;
       font-weight: 600; font-size: 1.02rem; line-height: 1.22;
       letter-spacing: -0.2px;
     }
@@ -302,7 +303,7 @@
       width: 56px; min-width: 56px; text-align: center;
       background: var(--accent-soft); border-radius: 12px; padding: 9px 4px;
     }
-    .event .date .d { font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.3rem; color: var(--accent); line-height: 1; }
+    .event .date .d { font-family: 'Inter', system-ui, sans-serif; font-weight: 900; font-size: 1.3rem; color: var(--accent); line-height: 1; }
     .event .date .m { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; color: var(--accent-dark); margin-top: 3px; }
     .event .info h3 { font-size: 0.98rem; font-weight: 700; }
     .event .info .meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
@@ -313,7 +314,7 @@
       border-radius: 16px; height: 110px; padding: 14px; cursor: pointer;
       display: flex; flex-direction: column; justify-content: space-between;
       color: #fff; position: relative; overflow: hidden;
-      font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.1rem;
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 900; font-size: 1.1rem;
       box-shadow: var(--shadow);
     }
     .cat-tile span.emoji { font-size: 1.5rem; }
@@ -338,13 +339,13 @@
       padding: 5px 11px; border-radius: 999px;
     }
     .detail-body h1 {
-      font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.7rem;
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 900; font-size: 1.7rem;
       line-height: 1.15; letter-spacing: -0.5px; margin: 12px 0 10px;
     }
     .detail-body .meta { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 18px;
       display: flex; align-items: center; gap: 6px; }
     .detail-body p { font-size: 1rem; line-height: 1.65; color: #2b2723; margin-bottom: 16px; }
-    .detail-body h3 { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 900; margin: 22px 0 10px; }
+    .detail-body h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 1.2rem; font-weight: 900; margin: 22px 0 10px; }
     .tipps li { font-size: 0.98rem; line-height: 1.55; margin: 0 0 14px 4px; padding-left: 12px;
       list-style: none; position: relative; }
     .tipps li::before { content: ""; position: absolute; left: -6px; top: 8px;
@@ -354,7 +355,7 @@
     /* ---------- Empty / Favoriten ---------- */
     .empty { text-align: center; padding: 70px 30px; color: var(--text-muted); }
     .empty .big { font-size: 3rem; margin-bottom: 12px; }
-    .empty h3 { font-family: 'Fraunces', serif; color: var(--text); font-size: 1.2rem; margin-bottom: 8px; }
+    .empty h3 { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-size: 1.2rem; margin-bottom: 8px; }
 
     /* ---------- Bottom-Navigation ---------- */
     nav.tabbar {
@@ -368,14 +369,21 @@
       padding-bottom: var(--safe-bottom);
     }
     .tab {
+      position: relative;
       flex: 1; background: none; border: none; cursor: pointer;
       display: flex; flex-direction: column; align-items: center; gap: 3px;
       color: var(--text-muted); font-size: 0.62rem; font-weight: 700;
       padding: 6px 0;
     }
     .tab svg { width: 23px; height: 23px; }
-    .tab.active { color: var(--accent); }
-    .tab.active svg { stroke: var(--accent); }
+    .tab.active { color: var(--text); }
+    .tab.active svg { stroke: var(--text); }
+    .tab.active::before {
+      content: ""; position: absolute; top: -1px; left: 50%;
+      transform: translateX(-50%);
+      width: 30px; height: 3px; border-radius: 0 0 3px 3px;
+      background: var(--brand);
+    }
 
     /* Toast */
     .toast {
@@ -397,8 +405,8 @@
     .install-bar.show { display: flex; }
     .install-bar p { font-size: 0.82rem; flex: 1; line-height: 1.3; }
     .install-bar button {
-      background: var(--accent); color: #fff; border: none; border-radius: 999px;
-      padding: 8px 14px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap;
+      background: var(--brand); color: var(--text); border: none; border-radius: 999px;
+      padding: 8px 14px; font-weight: 800; font-size: 0.8rem; cursor: pointer; white-space: nowrap;
     }
     .install-bar .x { background: none; padding: 4px; opacity: 0.7; }
   </style>
@@ -409,7 +417,7 @@
     <header>
       <div class="header-row">
         <div class="logo" onclick="go('home')" aria-label="Mit Vergnügen">
-          <span class="mit">mit</span><span class="verg">Vergnügen<span class="dot">.</span></span>
+          <span class="l1">Mit</span><span class="l2">Vergnügen</span>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
           <button class="city-pill" id="cityBtn" title="Stadt wechseln">
@@ -555,16 +563,15 @@
   };
 
   const CATS = [
-    { id: 'essen',  name: 'Essen & Trinken', emoji: '🍝', bg: 'linear-gradient(135deg,#ff5e7e,#ff1f5e)' },
-    { id: 'ausgehen', name: 'Ausgehen',       emoji: '🍸', bg: 'linear-gradient(135deg,#7b5cff,#5e1fff)' },
-    { id: 'kultur', name: 'Kultur',          emoji: '🎨', bg: 'linear-gradient(135deg,#ff9d3d,#ff6a00)' },
-    { id: 'stadt',  name: 'Stadtleben',      emoji: '🏙️', bg: 'linear-gradient(135deg,#21c2a8,#0a9b86)' },
-    { id: 'shopping', name: 'Shopping',       emoji: '🛍️', bg: 'linear-gradient(135deg,#ffce3d,#ffab00)' },
-    { id: 'reise',  name: 'Reisen',          emoji: '🧳', bg: 'linear-gradient(135deg,#3db8ff,#0077ff)' }
+    { id: 'food',         name: 'Food',         emoji: '🍔', bg: 'linear-gradient(135deg,#ffe200,#f2b600)' },
+    { id: 'erlebnis',     name: 'Erlebnis',     emoji: '✨', bg: 'linear-gradient(135deg,#6c2bd9,#9a4dff)' },
+    { id: 'unterhaltung', name: 'Unterhaltung', emoji: '🎭', bg: 'linear-gradient(135deg,#141414,#3a3a3a)' },
+    { id: 'ausgehen',     name: 'Ausgehen',     emoji: '🍸', bg: 'linear-gradient(135deg,#ff5e7e,#e0004e)' },
+    { id: 'ausflug',      name: 'Ausflug',      emoji: '🧭', bg: 'linear-gradient(135deg,#21c2a8,#0a9b86)' }
   ];
 
   const ARTICLES = [
-    { id:'a1', cat:'essen', tag:'Essen & Trinken', img:IMG.brunch,
+    { id:'a1', cat:'food', tag:'Essen & Trinken', img:IMG.brunch,
       title:'11 Cafés in Berlin, in denen das Frühstück zur Liebeserklärung wird',
       author:'Lena', read:'6 Min', date:'Heute',
       intro:'Berlin und Frühstücken – das ist eine ganz besondere Beziehung. Wir haben elf Orte gefunden, an denen der Sonntagmorgen niemals enden soll.',
@@ -588,7 +595,7 @@
         ['Tier, Neukölln','Klein, dunkel, gut. An der Weserstraße stimmt einfach jeder Drink.'],
         ['Truffle Pig, Neukölln','Lässige Nachbarschaftsbar mit kreativen Drinks und gar nicht abgehobenen Preisen.']
       ]},
-    { id:'a3', cat:'stadt', tag:'Stadtleben', img:IMG.park,
+    { id:'a3', cat:'erlebnis', tag:'Stadtleben', img:IMG.park,
       title:'12 Dinge, die du diesen Sommer in Berlin machen musst',
       author:'Mit Vergnügen', read:'8 Min', date:'Vor 2 Tagen',
       intro:'Der Berliner Sommer ist kurz, aber er hat es in sich. Hier ist deine Liste für die schönste Jahreszeit der Stadt.',
@@ -610,7 +617,7 @@
         ['://about blank','Politisch, divers und mit einem der schönsten Clubgärten der Stadt.'],
         ['Tresor','Im alten Heizkraftwerk dröhnt seit über 30 Jahren der härteste Techno Berlins.']
       ]},
-    { id:'a5', cat:'kultur', tag:'Kultur', img:IMG.art,
+    { id:'a5', cat:'unterhaltung', tag:'Kultur', img:IMG.art,
       title:'8 Ausstellungen & Museen, die du gerade nicht verpassen solltest',
       author:'Marie', read:'6 Min', date:'Vor 4 Tagen',
       intro:'Berlin ist eine Stadt der Kunst – und gerade lohnt sich der Museumsbesuch ganz besonders.',
@@ -621,7 +628,7 @@
         ['East Side Gallery','Das längste erhaltene Stück Berliner Mauer, bemalt von Künstler:innen aus aller Welt.'],
         ['Museum für Fotografie','Helmut Newton und wechselnde Schauen, nur Schritte vom Zoo entfernt.']
       ]},
-    { id:'a6', cat:'essen', tag:'Essen & Trinken', img:IMG.food,
+    { id:'a6', cat:'food', tag:'Essen & Trinken', img:IMG.food,
       title:'Diese 10 Restaurants beweisen, dass Berlin kulinarisch alles kann',
       author:'Theo', read:'9 Min', date:'Vor 5 Tagen',
       intro:'Von levantinisch bis vietnamesisch: In Berlin isst man sich einmal um die ganze Welt – mal sterneprämiert, mal an der Imbiss-Theke.',
@@ -632,7 +639,7 @@
         ['Mrs Robinson’s, Prenzlauer Berg','Kreative Sharing-Plates, die ständig überraschen.'],
         ['Lon Men’s Noodle House, Wilmersdorf','Taiwanesische Nudeln, die Berlin seit Jahren glücklich machen.']
       ]},
-    { id:'a7', cat:'essen', tag:'Streetfood', img:IMG.market,
+    { id:'a7', cat:'food', tag:'Streetfood', img:IMG.market,
       title:'9 Imbisse, für die sich jede Currywurst-Diskussion lohnt',
       author:'Pavel', read:'5 Min', date:'Vor 5 Tagen',
       intro:'Berlin und Streetfood – das ist große Liebe. Diese Klassiker gehören zu jedem ehrlichen Stadtbummel dazu.',
@@ -642,7 +649,7 @@
         ['Mustafas Gemüse Kebap, Kreuzberg','Der berühmteste Gemüsedöner der Stadt – die Schlange ist Teil des Erlebnisses.'],
         ['Burgermeister, Kreuzberg','Burger in einer alten öffentlichen Toilette unter der Hochbahn am Schlesischen Tor.']
       ]},
-    { id:'a8', cat:'shopping', tag:'Shopping', img:IMG.market,
+    { id:'a8', cat:'ausflug', tag:'Shopping', img:IMG.market,
       title:'Die schönsten Flohmärkte für deinen Sonntagsbummel',
       author:'Nina', read:'5 Min', date:'Vor 6 Tagen',
       intro:'Trödeln gehört zu Berlin wie die Currywurst. Diese Flohmärkte lohnen das frühe Aufstehen.',
@@ -652,7 +659,7 @@
         ['Arkonaplatz, Mitte','Vintage-Möbel und Vinyl in entspannter Prenzlberg-Atmosphäre.'],
         ['Nowkoelln Flowmarkt, Neukölln','Alle zwei Wochen am Maybachufer, direkt am Landwehrkanal.']
       ]},
-    { id:'a9', cat:'stadt', tag:'Stadtleben', img:IMG.coffee,
+    { id:'a9', cat:'erlebnis', tag:'Stadtleben', img:IMG.coffee,
       title:'7 versteckte Orte, die kaum ein Berliner kennt',
       author:'Mit Vergnügen', read:'4 Min', date:'Vor 1 Woche',
       intro:'Hinter unscheinbaren Fassaden verstecken sich die schönsten Geheimnisse der Stadt.',
@@ -661,7 +668,7 @@
         ['Teufelsberg','Verlassene Abhörstation auf einem Trümmerberg im Grunewald – heute Street-Art-Galerie mit Aussicht.'],
         ['Liberda-Gärten am Landwehrkanal','Versteckte grüne Ruhe nur Schritte vom Neuköllner Trubel entfernt.']
       ]},
-    { id:'a10', cat:'kultur', tag:'Kino & Bühne', img:IMG.city,
+    { id:'a10', cat:'unterhaltung', tag:'Kino & Bühne', img:IMG.city,
       title:'6 Kinos & Bühnen, die jeden Abend zum Erlebnis machen',
       author:'Greta', read:'6 Min', date:'Vor 1 Woche',
       intro:'Vom samtenen Premierenkino bis zur Freilichtbühne – so schön geht Kultur in Berlin.',
@@ -673,18 +680,18 @@
   ];
 
   const EVENTS = [
-    { id:'e1', day:'18', mon:'Jun', cat:'essen', title:'Street Food Thursday', where:'Markthalle Neun, Kreuzberg · 17:00', img:IMG.market },
+    { id:'e1', day:'18', mon:'Jun', cat:'food', title:'Street Food Thursday', where:'Markthalle Neun, Kreuzberg · 17:00', img:IMG.market },
     { id:'e2', day:'19', mon:'Jun', cat:'music', title:'Konzert im Astra Kulturhaus', where:'RAW-Gelände, Friedrichshain · 20:00', img:IMG.music },
     { id:'e3', day:'21', mon:'Jun', cat:'music', title:'Fête de la Musique', where:'Stadtweit · ganztägig, Eintritt frei', img:IMG.music },
     { id:'e4', day:'21', mon:'Jun', cat:'ausgehen', title:'Rooftop Sundowner', where:'Klunkerkranich, Neukölln · 19:00', img:IMG.rooftop },
-    { id:'e5', day:'22', mon:'Jun', cat:'stadt', title:'Flohmarkt & Karaoke', where:'Mauerpark, Prenzlauer Berg · ab 10:00', img:IMG.market },
-    { id:'e6', day:'27', mon:'Jun', cat:'kultur', title:'Lange Nacht der Museen', where:'Über 70 Häuser stadtweit · 18:00', img:IMG.art },
-    { id:'e7', day:'28', mon:'Jun', cat:'stadt', title:'Christopher Street Day · Pride', where:'Vom Ku’damm zum Brandenburger Tor · 12:00', img:IMG.city }
+    { id:'e5', day:'22', mon:'Jun', cat:'erlebnis', title:'Flohmarkt & Karaoke', where:'Mauerpark, Prenzlauer Berg · ab 10:00', img:IMG.market },
+    { id:'e6', day:'27', mon:'Jun', cat:'unterhaltung', title:'Lange Nacht der Museen', where:'Über 70 Häuser stadtweit · 18:00', img:IMG.art },
+    { id:'e7', day:'28', mon:'Jun', cat:'erlebnis', title:'Christopher Street Day · Pride', where:'Vom Ku’damm zum Brandenburger Tor · 12:00', img:IMG.city }
   ];
 
   const EVENT_FILTERS = [
-    {id:'all', name:'Alle'}, {id:'music', name:'Musik'}, {id:'kultur', name:'Kultur'},
-    {id:'essen', name:'Food'}, {id:'ausgehen', name:'Party'}, {id:'stadt', name:'Stadt'}
+    {id:'all', name:'Alle'}, {id:'music', name:'Musik'}, {id:'unterhaltung', name:'Bühne'},
+    {id:'food', name:'Food'}, {id:'ausgehen', name:'Party'}, {id:'erlebnis', name:'Stadt'}
   ];
 
   /* ---------- State ---------- */

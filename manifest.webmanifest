@@ -6,8 +6,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#ffe200",
+  "theme_color": "#ffe200",
   "lang": "de",
   "categories": ["lifestyle", "entertainment", "food", "travel"],
   "icons": [

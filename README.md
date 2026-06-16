@@ -7,7 +7,7 @@ auf dem Home-Bildschirm.
 ## Features
 
 - 📱 **Mobile-first** mit App-Feel: Bottom-Navigation, Sticky-Header, Story-Reihe, Karten-Feed
-- 🎨 **Mit-Vergnügen-Look**: clean weiß, kräftige Serifen-Typografie, Signature-Pink (`#ff1f5e`)
+- 🎨 **Mit-Vergnügen-Look**: knallgelbe Navbar (`#ffe200`), schwarzer Handschrift-Schriftzug, weißer Inhalt, serifenlose Headlines
 - 🔖 **Tabs**: Entdecken · Guides · Events · Karte · Favoriten
 - ❤️ **Favoriten** (im Browser gespeichert via `localStorage`)
 - 🔍 **Suche** & Kategorie-Filter (Essen & Trinken, Ausgehen, Kultur, Stadtleben, Shopping, Reisen)
@@ -37,10 +37,12 @@ Auf dem Handy: Seite öffnen → Browser-Menü → **„Zum Home-Bildschirm hinz
 
 ## Hinweise zum Logo & zu den Inhalten
 
-- Der Schriftzug **„mit Vergnügen"** ist als CSS/SVG-Rekonstruktion umgesetzt, da die
-  offizielle Logo-Datei nicht automatisiert von der Webseite geladen werden konnte.
-  Die **Original-PNG/SVG** kann einfach als `icon.svg` ersetzt bzw. im Header von
-  `index.html` (Element `.logo`) eingebunden werden.
+- Farben & Aufbau orientieren sich an einem **Screenshot der Original-Webseite**
+  (gelbe Navbar, schwarzer Handschrift-Schriftzug, Kategorien FOOD · ERLEBNIS ·
+  UNTERHALTUNG · AUSGEHEN · AUSFLUG).
+- Der Schriftzug **„Mit Vergnügen"** ist als CSS/SVG-Rekonstruktion mit Handschrift-Font
+  (Caveat) umgesetzt. Die **Original-Logo-Datei** kann einfach als `icon.svg` ersetzt
+  bzw. im Header von `index.html` (Element `.logo`) eingebunden werden.
 - Texte, Tipps und Bilder sind **Demonstrations-Inhalte** (Platzhalter, Bilder via Unsplash)
   und kein offizieller redaktioneller Content von Mit Vergnügen.
 - „Mit Vergnügen" und das zugehörige Logo sind Eigentum der Mit Vergnügen GmbH.
